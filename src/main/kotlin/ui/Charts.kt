@@ -10,7 +10,11 @@ import java.awt.Color
 
 class Charts {
     companion object {
-        fun createChart(arguments: List<Double>, values: List<Double>, title: String): XYChart {
+        fun createFirstWarmupChart(
+            main : Pair<List<Double>, List<Double>>,
+            partials: List<Pair<List<Double>, List<Double>>>,
+            title: String
+        ): XYChart {
             val chart =
                 XYChartBuilder()
                     .width(800)
@@ -22,8 +26,16 @@ class Charts {
             chart.styler.yAxisMin = -10.0
             chart.styler.yAxisMax = 10.0
 
-            val seriesData = chart.addSeries("Funkcja RBF", arguments, values)
 
+
+            for ( (idx, partial) in partials.withIndex()) {
+                val partialSeries = chart.addSeries("C$idx", partial.first, partial.second)
+                partialSeries.marker = SeriesMarkers.NONE
+                partialSeries.lineColor = Color.RED
+                partialSeries.lineWidth = 0.5f
+            }
+
+            val seriesData = chart.addSeries("Funkcja RBF", main.first, main.second)
             seriesData.lineColor = Color.BLACK
             seriesData.marker = SeriesMarkers.NONE
 

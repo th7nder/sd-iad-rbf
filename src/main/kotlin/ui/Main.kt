@@ -9,7 +9,24 @@ fun main() {
     val network = Network(1, 4, 1)
 
     val arguments = Utils.arange(0.0, 10.0, 0.01)
-    val values = arguments.map { network.output(Point(it)).first() }.toList()
+    var values = arguments.map { network.output(Point(it)).first() }.toList()
 
-    Charts.saveChart("out4.png", Charts.createChart(arguments, values, "Sieć RBF"))
+    val partials = ArrayList<Pair<List<Double>, List<Double>>>()
+    for (radialNeuron in network.radialLayer) {
+        partials.add(
+            Pair(
+                arguments,
+                arguments.map {radialNeuron.output(Point(it))}.toList()
+            )
+        )
+    }
+
+    Charts.saveChart(
+        "out4.png",
+        Charts.createFirstWarmupChart(
+            Pair(arguments, values),
+            partials,
+            "Sieć RBF"
+        )
+    )
 }
