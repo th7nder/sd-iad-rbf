@@ -1,17 +1,24 @@
 package network
 
 import math.Point
+import kotlin.random.Random
 
-class LinearNeuron(numNeurons : Int) {
-    val weights = DoubleArray(numNeurons + 1)
-    val neurons = arrayListOf(RadialNeuron(weights.size))
+class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
+    private val weights = DoubleArray(numPreviousNeurons + 1)
+    private val neurons = arrayListOf(RadialNeuron(dimension, 0.0))
 
-    fun connect(neuron : RadialNeuron) {
-        if (neurons.size == weights.size) {
+    init {
+        for (index in weights.indices) {
+            weights[index] = Random.nextDouble(-4.0, 4.0)
+        }
+    }
+
+    fun connect(neurons : List<RadialNeuron>) {
+        if (this.neurons.size + neurons.size > weights.size) {
             throw IllegalStateException("add more neurons than it can operate on")
         }
 
-        neurons.add(neuron)
+        this.neurons.addAll(neurons)
     }
 
     fun output(x: Point) : Double {
