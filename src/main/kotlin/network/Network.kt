@@ -8,10 +8,10 @@ class Network(
     centers: List<Point>,
     numLinearNeurons: Int
 ) {
-    private val numRadialNeurons = sigmas.size
+    val numRadialNeurons = sigmas.size
 
-    val radialLayer = ArrayList<RadialNeuron>(numRadialNeurons)
-    private val outputLayer = ArrayList<LinearNeuron>(numLinearNeurons)
+    private val radialLayer = ArrayList<RadialNeuron>(numRadialNeurons)
+    val outputLayer = ArrayList<LinearNeuron>(numLinearNeurons)
 
     init {
         for (i in 0 until numRadialNeurons) {

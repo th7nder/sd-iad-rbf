@@ -29,10 +29,11 @@ class Charts {
 
 
             for ( (idx, partial) in partials.withIndex()) {
-                val partialSeries = chart.addSeries("C$idx", partial.first, partial.second)
+                val partialSeries = chart.addSeries("Funkcje neuronów $idx", partial.first, partial.second)
                 partialSeries.marker = SeriesMarkers.NONE
                 partialSeries.lineColor = Color.RED
                 partialSeries.lineWidth = 0.5f
+                partialSeries.isShowInLegend = idx == 0
             }
 
             val seriesData = chart.addSeries("Funkcja RBF", main.first, main.second)
