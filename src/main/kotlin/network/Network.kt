@@ -2,13 +2,20 @@ package network
 
 import math.Point
 
-class Network(dimension: Int, numRadialNeurons: Int, numLinearNeurons: Int) {
+class Network(
+    dimension: Int,
+    sigmas : List<Double>,
+    centers: List<Point>,
+    numLinearNeurons: Int
+) {
+    private val numRadialNeurons = sigmas.size
+
     val radialLayer = ArrayList<RadialNeuron>(numRadialNeurons)
-    val outputLayer = ArrayList<LinearNeuron>(numLinearNeurons)
+    private val outputLayer = ArrayList<LinearNeuron>(numLinearNeurons)
 
     init {
-        for (i in 1..numRadialNeurons) {
-            radialLayer.add(RadialNeuron(dimension))
+        for (i in 0 until numRadialNeurons) {
+            radialLayer.add(RadialNeuron(centers[i], sigmas[i]))
         }
 
         for (i in 1..numLinearNeurons) {

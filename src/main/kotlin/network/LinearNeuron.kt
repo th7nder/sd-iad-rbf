@@ -5,7 +5,7 @@ import kotlin.random.Random
 
 class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
     private val weights = DoubleArray(numPreviousNeurons + 1)
-    private val neurons = arrayListOf(RadialNeuron(dimension, 0.0))
+    private val neurons = arrayListOf(RadialNeuron(Point(dimension),0.0))
 
     init {
         for (index in weights.indices) {

@@ -2,18 +2,8 @@ package network
 
 import math.Point
 import kotlin.math.pow
-import kotlin.random.Random
 
-class RadialNeuron(dimension : Int, sigma : Double = 1.0) {
-    private var sigma : Double = sigma
-    private val center : Point = Point(dimension)
-
-    init {
-        for (index in center.coordinates.indices) {
-            center.coordinates[index] = Random.nextDouble(0.0, 10.0)
-        }
-    }
-
+class RadialNeuron(private val center : Point, private val sigma : Double) {
     fun output(x : Point) = R(center.distance(x))
 
     fun R(d: Double) = Math.exp(
