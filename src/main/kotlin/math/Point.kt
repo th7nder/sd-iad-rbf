@@ -2,7 +2,29 @@ package math
 
 import kotlin.math.pow
 
-class Point(vararg val coordinates : Double) {
+class Point(n: Int) {
+    val coordinates = DoubleArray(n)
+
+    constructor(vararg coordinates : Double) : this(coordinates.size) {
+        for (index in coordinates.indices) {
+            this.coordinates[index] = coordinates[index]
+        }
+    }
+
+    fun setLocation(vararg coordinates: Double) {
+        for (index in coordinates.indices) {
+            this.coordinates[index] = coordinates[index]
+        }
+    }
+
+    fun setLocation(b: Point) {
+        for (index in b.coordinates.indices) {
+            this.coordinates[index] = b.coordinates[index]
+        }
+    }
+
+    fun dimension() = coordinates.size
+
     fun distance(b: Point) : Double {
         if (coordinates.size != b.coordinates.size) {
             throw IllegalArgumentException("calculate point in different dimensions")
@@ -14,4 +36,5 @@ class Point(vararg val coordinates : Double) {
             .sum()
         )
     }
+
 }
