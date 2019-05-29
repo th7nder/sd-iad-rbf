@@ -33,7 +33,6 @@ class Charts {
                 partialSeries.marker = SeriesMarkers.NONE
                 partialSeries.lineColor = Color.RED
                 partialSeries.lineWidth = 0.5f
-                partialSeries.isShowInLegend = idx == 0
             }
 
             val seriesData = chart.addSeries("Funkcja RBF", main.first, main.second)

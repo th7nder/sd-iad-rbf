@@ -15,7 +15,7 @@ class Warmup1 {
 
         val partials = ArrayList<Pair<List<Double>, List<Double>>>()
         val outputNeuron = network.outputLayer.first()
-        for (idx in 0 until network.numRadialNeurons) {
+        for (idx in 1..network.numRadialNeurons) {
             partials.add(
                 Pair(
                     arguments,
