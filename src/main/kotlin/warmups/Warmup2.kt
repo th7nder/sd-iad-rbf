@@ -36,7 +36,7 @@ class Warmup2 : Warmup() {
 
         network.train(6000) { i, error -> if (i % 1000 == 0) println("$i $error") }
 
-        Charts.saveChart("out4_approx", plotNetwork(arguments, network))
+        Charts.saveChart("out4", plotNetwork(arguments, network))
     }
 
     fun taskK10() {
@@ -52,7 +52,7 @@ class Warmup2 : Warmup() {
         network.train(6000) { i, error -> if (i % 1000 == 0) println("$i $error") }
         println("Trained...")
 
-        Charts.saveChart("out10_approx", plotNetwork(arguments, network))
+        Charts.saveChart("out10", plotNetwork(arguments, network))
     }
 
     override fun plotNetwork(arguments: List<Double>, network: Network): XYChart {
