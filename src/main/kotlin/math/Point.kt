@@ -2,8 +2,14 @@ package math
 
 import kotlin.math.pow
 
-class Point(n: Int) {
+class Point(n: Int) : Cloneable {
     val coordinates = DoubleArray(n)
+
+    public override fun clone(): Point {
+        val point = Point(coordinates.size)
+        point.setLocation(this)
+        return point
+    }
 
     constructor(vararg coordinates : Double) : this(coordinates.size) {
         for (index in coordinates.indices) {
