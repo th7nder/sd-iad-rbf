@@ -1,18 +1,16 @@
 package warmups
 
 import math.Point
-import math.Utils
 import network.Network
 import org.knowm.xchart.XYChart
 import org.knowm.xchart.XYChartBuilder
 import org.knowm.xchart.style.markers.SeriesMarkers
-import utils.Charts
 import java.awt.Color
 
 abstract class Warmup {
-    protected fun plotNetwork(arguments: List<Double>, network: Network) : XYChart {
+    open fun plotNetwork(arguments: List<Double>, network: Network) : XYChart {
 
-        var values = arguments.map { network.output(Point(it)).first() }.toList()
+        var values = arguments.map { network.output(Point(it)).x() }.toList()
 
         val partials = ArrayList<Pair<List<Double>, List<Double>>>()
         val outputNeuron = network.outputLayer.first()
@@ -20,7 +18,7 @@ abstract class Warmup {
             partials.add(
                 Pair(
                     arguments,
-                    arguments.map { outputNeuron.applyWeights(Point(it))[idx] }.toList()
+                    arguments.map { outputNeuron.weigh(Point(it))[idx] }.toList()
                 )
             )
         }
@@ -32,7 +30,7 @@ abstract class Warmup {
         )
     }
 
-    open fun createChart(
+    fun createChart(
         main : Pair<List<Double>, List<Double>>,
         partials: List<Pair<List<Double>, List<Double>>>,
         title: String

@@ -21,16 +21,36 @@ class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
         this.neurons.addAll(neurons)
     }
 
+    fun weigh(x: Point) : List<Double> {
+        return neurons.mapIndexed { index, neuron ->
+            if (index == 0) {
+                weights[index] * 1
+            } else {
+                weights[index] * neuron.z(x)
+            }
+        }
+    }
 
-    fun applyWeights(x: Point) : List<Double> {
+    fun output(x: Point) : Double {
         if (weights.size != neurons.size) {
             throw IllegalStateException("calculate without proper connected neuron number")
         }
 
-        return neurons.mapIndexed { index, neuron ->  weights[index] * neuron.output(x) }
+        return weigh(x).sum()
     }
 
-    fun output(x: Point) : Double {
-        return applyWeights(x).sum()
+
+    fun step(inputs : List<Point>, expected : List<Double>, alpha: Double) {
+        for (weightIndex in weights.indices) {
+            var sum = 0.0
+            for ((input, expected) in inputs zip expected) {
+                val difference = output(input) - expected
+                val weight = neurons[weightIndex].z(input)
+                val multiplied = difference * weight
+                sum += multiplied
+            }
+            sum /= inputs.size
+            weights[weightIndex] -= alpha * sum
+        }
     }
 }

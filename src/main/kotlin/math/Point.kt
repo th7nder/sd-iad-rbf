@@ -4,6 +4,7 @@ import kotlin.math.pow
 
 fun Collection<Pair<Point, Point>>.input() = map { it.first }
 fun Collection<Pair<Point, Point>>.output() = map { it.second }
+fun Collection<Point>.project(n: Int) = map {it.coordinates[n]}
 
 class Point(n: Int) : Cloneable {
     val coordinates = DoubleArray(n)
@@ -39,6 +40,32 @@ class Point(n: Int) : Cloneable {
     fun setLocation(b: Point) {
         setLocation(b.coordinates)
     }
+
+    operator fun minus(b: Point) : Point {
+        if (coordinates.size != b.coordinates.size) {
+            throw IllegalArgumentException("calculate point in different dimensions")
+        }
+
+        val result = clone()
+        for (index in b.coordinates.indices) {
+            result.coordinates[index] -= b.coordinates[index]
+        }
+
+        return result
+    }
+
+
+    fun pow(x: Double) : Point {
+        val result = clone()
+
+        for (index in coordinates.indices) {
+            result.coordinates[index] = coordinates[index].pow(x)
+        }
+
+        return result
+    }
+
+    fun sum() : Double = coordinates.sum()
 
 
 

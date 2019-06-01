@@ -1,14 +1,19 @@
 package network
 
 import math.Point
+import math.input
+import math.output
+import math.project
 import network.centers.CenterGenerator
 import network.sigmas.SigmaGenerator
 
-class Network(val numRadialNeurons : Int) {
+class Network(val numRadialNeurons : Int, var alpha : Double) {
     private val radialLayer = ArrayList<RadialNeuron>()
     val outputLayer = ArrayList<LinearNeuron>()
+    lateinit var trainingData : List<Pair<Point, Point>>
 
-    constructor(dimension: Int, sigmas : List<Double>, centers: List<Point>, numLinearNeurons: Int) : this(sigmas.size) {
+
+    constructor(dimension: Int, sigmas : List<Double>, centers: List<Point>, numLinearNeurons: Int) : this(sigmas.size, 0.0) {
         createRadialLayer(sigmas, centers)
         createLinearLayer(dimension, numLinearNeurons)
     }
@@ -16,15 +21,17 @@ class Network(val numRadialNeurons : Int) {
     constructor(
         numRadialNeurons: Int,
         numLinearNeurons: Int,
-        data: List<Point>,
+        trainingData: List<Pair<Point, Point>>,
         centerGenerator: CenterGenerator,
-        sigmaGenerator: SigmaGenerator
-    ) : this(numRadialNeurons) {
-        val centers = centerGenerator.generate(numRadialNeurons, data)
+        sigmaGenerator: SigmaGenerator,
+        alpha: Double
+    ) : this(numRadialNeurons, alpha) {
+        this.trainingData = trainingData
+        val centers = centerGenerator.generate(numRadialNeurons, trainingData.input())
         val sigmas = sigmaGenerator.generate(centers)
 
         createRadialLayer(sigmas, centers)
-        createLinearLayer(data.first().dimension(), numLinearNeurons)
+        createLinearLayer(trainingData.input().first().dimension(), numLinearNeurons)
     }
 
     private fun createRadialLayer(sigmas: List<Double>, centers: List<Point>) {
@@ -41,5 +48,15 @@ class Network(val numRadialNeurons : Int) {
         }
     }
 
-    fun output(x: Point) : List<Double> = outputLayer.map { it.output(x) }
+    fun output(x: Point) : Point = Point(outputLayer.map { it.output(x) })
+
+    fun step() {
+        for ((index, linearNeuron) in outputLayer.withIndex()) {
+            linearNeuron.step(trainingData.input(), trainingData.output().project(index), alpha)
+        }
+    }
+
+    fun error(data: List<Pair<Point, Point>>) = data.sumByDouble { (input, expected) -> (output(input) - expected).pow(2.0).sum() } / (2.0 * data.size)
+    fun error() = error(trainingData)
+
 }
