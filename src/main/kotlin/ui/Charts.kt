@@ -20,11 +20,11 @@ class Charts {
                     .width(800)
                     .height(800)
                     .title(title).build()
-            chart.styler.xAxisMin = 0.0
-            chart.styler.xAxisMax = 10.0
+            //chart.styler.xAxisMin = 0.0
+            //chart.styler.xAxisMax = 10.0
 
-            chart.styler.yAxisMin = -10.0
-            chart.styler.yAxisMax = 10.0
+            //chart.styler.yAxisMin = -10.0
+            //chart.styler.yAxisMax = 10.0
 
 
 

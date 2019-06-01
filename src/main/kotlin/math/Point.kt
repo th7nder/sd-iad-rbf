@@ -2,8 +2,13 @@ package math
 
 import kotlin.math.pow
 
+fun Collection<Pair<Point, Point>>.input() = map { it.first }
+fun Collection<Pair<Point, Point>>.output() = map { it.second }
+
 class Point(n: Int) : Cloneable {
     val coordinates = DoubleArray(n)
+
+    fun x() = coordinates[0]
 
     public override fun clone(): Point {
         val point = Point(coordinates.size)
@@ -11,23 +16,31 @@ class Point(n: Int) : Cloneable {
         return point
     }
 
-    constructor(vararg coordinates : Double) : this(coordinates.size) {
-        for (index in coordinates.indices) {
-            this.coordinates[index] = coordinates[index]
+    constructor(coordinates: List<Double>) : this(coordinates.size){
+        for ((index, coordinate) in coordinates.withIndex()) {
+            this.coordinates[index] = coordinate
         }
     }
 
-    fun setLocation(vararg coordinates: Double) {
-        for (index in coordinates.indices) {
-            this.coordinates[index] = coordinates[index]
+    constructor(coordinates : DoubleArray) : this(coordinates.size) {
+        setLocation(coordinates)
+    }
+
+    constructor(x: Double) : this(1) {
+        coordinates[0] = x
+    }
+
+    fun setLocation(coordinates: DoubleArray) {
+        for ((index, coordinate) in coordinates.withIndex()) {
+            this.coordinates[index] = coordinate
         }
     }
 
     fun setLocation(b: Point) {
-        for (index in b.coordinates.indices) {
-            this.coordinates[index] = b.coordinates[index]
-        }
+        setLocation(b.coordinates)
     }
+
+
 
     fun dimension() = coordinates.size
 

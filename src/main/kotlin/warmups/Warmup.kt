@@ -7,9 +7,7 @@ import org.knowm.xchart.XYChart
 import utils.Charts
 
 abstract class Warmup {
-    private val arguments = Utils.arange(0.0, 10.0, 0.01)
-
-    protected fun plotNetwork(network: Network) : XYChart {
+    protected fun plotNetwork(arguments: List<Double>, network: Network) : XYChart {
 
         var values = arguments.map { network.output(Point(it)).first() }.toList()
 

@@ -7,6 +7,7 @@ import org.knowm.xchart.XYChart
 import utils.Charts
 
 class Warmup1 : Warmup() {
+    private val arguments = Utils.arange(0.0, 10.0, 0.01)
     fun taskK4() {
         val network = Network(
             1,
@@ -21,7 +22,7 @@ class Warmup1 : Warmup() {
         )
 
 
-        Charts.saveChart("out4", plotNetwork(network))
+        Charts.saveChart("out4", plotNetwork(arguments, network))
     }
 
     fun taskK10() {
@@ -47,6 +48,6 @@ class Warmup1 : Warmup() {
         )
 
 
-        Charts.saveChart("out10", plotNetwork(network))
+        Charts.saveChart("out10", plotNetwork(arguments, network))
     }
 }
