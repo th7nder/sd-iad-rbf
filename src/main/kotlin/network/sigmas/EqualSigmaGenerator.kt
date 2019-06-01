@@ -3,8 +3,12 @@ package network.sigmas
 import math.Point
 import kotlin.math.sqrt
 
-class EqualSigmaGenerator : SigmaGenerator {
+open class EqualSigmaGenerator : SigmaGenerator {
     override fun generate(centers: List<Point>): List<Double> {
+        if (centers.size == 1) {
+            return arrayListOf(1.0)
+        }
+
         val distances = ArrayList<Double>()
         for (center in centers) {
             for (anotherCenter in centers) {
