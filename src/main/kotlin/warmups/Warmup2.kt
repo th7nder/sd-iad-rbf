@@ -13,7 +13,6 @@ import org.knowm.xchart.style.lines.SeriesLines
 import org.knowm.xchart.style.markers.SeriesMarkers
 import utils.Charts
 import java.awt.Color
-import kotlin.math.abs
 
 class Warmup2 : Warmup() {
     private val data = DataLoader.loadFile("approx1", 1, 1)
@@ -32,8 +31,10 @@ class Warmup2 : Warmup() {
             data,
             FromDataGenerator(),
             EqualSigmaGenerator(),
-            0.1
+            0.5
         )
+
+        network.train(6000) { i, error -> if (i % 1000 == 0) println("$i $error") }
 
         Charts.saveChart("out4_approx", plotNetwork(arguments, network))
     }
@@ -45,28 +46,13 @@ class Warmup2 : Warmup() {
             data,
             FromDataGenerator(),
             EqualSigmaGenerator(),
-            0.5
+            0.6
         )
 
-        var i = 0
-        val errors = ArrayList<Double>()
-        while (true) {
-            network.step()
-            i += 1
-            val error = network.error()
-            println("$i $error")
+        network.train(6000) { i, error -> if (i % 1000 == 0) println("$i $error") }
+        println("Trained...")
 
-            if (error < 0.01) {
-                break
-            }
-
-            errors += error
-        }
-
-
-        if (network.error() < 10.0) {
-            Charts.saveChart("out10_approx", plotNetwork(arguments, network))
-        }
+        Charts.saveChart("out10_approx", plotNetwork(arguments, network))
     }
 
     override fun plotNetwork(arguments: List<Double>, network: Network): XYChart {
@@ -83,6 +69,6 @@ class Warmup2 : Warmup() {
 
 fun main() {
     val warmup = Warmup2()
-    //warmup.taskK4()
+    warmup.taskK4()
     warmup.taskK10()
 }

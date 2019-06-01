@@ -59,4 +59,21 @@ class Network(val numRadialNeurons : Int, var alpha : Double) {
     fun error(data: List<Pair<Point, Point>>) = data.sumByDouble { (input, expected) -> (output(input) - expected).pow(2.0).sum() } / (2.0 * data.size)
     fun error() = error(trainingData)
 
+    fun train(error: Double, onIteration : ((i : Int, error: Double) -> Unit)? = null) {
+        var i = 0
+        do {
+            step()
+            i += 1
+            val currentError = error()
+            onIteration?.invoke(i, currentError)
+        } while (currentError > error)
+    }
+
+    fun train(iters: Int,  onIteration : ((i : Int, error: Double) -> Unit)? = null) {
+        for (i in 1..iters) {
+            step()
+            onIteration?.invoke(i, error())
+        }
+    }
+
 }
