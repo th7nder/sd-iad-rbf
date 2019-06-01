@@ -21,14 +21,16 @@ class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
         this.neurons.addAll(neurons)
     }
 
-    fun weigh(x: Point) : List<Double> {
-        return neurons.mapIndexed { index, neuron ->
-            if (index == 0) {
-                weights[index] * 1
-            } else {
-                weights[index] * neuron.z(x)
-            }
+    private fun outputNeurons(x: Point) = neurons.mapIndexed { index, neuron ->
+        if (index == 0) {
+            1.0
+        } else {
+            neuron.z(x)
         }
+    }
+
+    fun weigh(x: Point) : List<Double> {
+        return outputNeurons(x).mapIndexed { index, output -> output * weights[index]}
     }
 
     fun output(x: Point) : Double {
@@ -41,16 +43,15 @@ class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
 
 
     fun step(inputs : List<Point>, expected : List<Double>, alpha: Double) {
-        for (weightIndex in weights.indices) {
-            var sum = 0.0
-            for ((input, expected) in inputs zip expected) {
-                val difference = output(input) - expected
-                val weight = neurons[weightIndex].z(input)
-                val multiplied = difference * weight
-                sum += multiplied
-            }
-            sum /= inputs.size
-            weights[weightIndex] -= alpha * sum
+        val adjustments = DoubleArray(weights.size)
+
+        for ((input, expected) in inputs zip expected) {
+            val difference = output(input) - expected
+            outputNeurons(input).forEachIndexed { index, output -> adjustments[index] += output * difference}
+        }
+
+        for (index in adjustments.indices) {
+            weights[index] -= alpha * (adjustments[index] / inputs.size)
         }
     }
 }

@@ -45,7 +45,7 @@ class Warmup2 : Warmup() {
             data,
             FromDataGenerator(),
             EqualSigmaGenerator(),
-            0.9
+            0.5
         )
 
         var i = 0
@@ -56,7 +56,7 @@ class Warmup2 : Warmup() {
             val error = network.error()
             println("$i $error")
 
-            if (error < 0.1) {
+            if (error < 0.01) {
                 break
             }
 
