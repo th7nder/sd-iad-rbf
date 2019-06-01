@@ -3,7 +3,6 @@ package warmups
 import math.Point
 import math.Utils
 import network.Network
-import org.knowm.xchart.XYChart
 import utils.Charts
 
 class Warmup1 : Warmup() {
@@ -50,4 +49,10 @@ class Warmup1 : Warmup() {
 
         Charts.saveChart("out10", plotNetwork(arguments, network))
     }
+}
+
+fun main() {
+    val warmup = Warmup1()
+    warmup.taskK4()
+    warmup.taskK10()
 }
