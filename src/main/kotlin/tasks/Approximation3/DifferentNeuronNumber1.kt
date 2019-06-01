@@ -12,13 +12,13 @@ import network.sigmas.TooSmallSigmaGenerator
 import utils.Charts
 
 class DifferentNeuronNumber1 : Approximation3() {
-    val numIterations = 6000
+    val numIterations = 10000
     val alpha = 0.5
     val folder = "approximation3/1/"
 
     fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
         val network = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
-        network.train(numIterations) { i, error -> if (i % 500 == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
+        network.train(numIterations) { i, error -> if (i % 1000 == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
 
         return network
     }
@@ -51,12 +51,11 @@ fun main() {
     val dnn = DifferentNeuronNumber1()
     //dnn.chartOptimalSigma()
 
-    dnn.singleNetwork(11, TooBigSigmaGenerator())
-    /*val second = GlobalScope.async { dnn.chartSmallSigma() }
+    val second = GlobalScope.async { dnn.chartSmallSigma() }
     val third = GlobalScope.async { dnn.chartBigSigma() }
 
     runBlocking {
         second.await()
         third.await()
-    }*/
+    }
 }
