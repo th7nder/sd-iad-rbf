@@ -51,11 +51,12 @@ fun main() {
     val dnn = DifferentNeuronNumber1()
     //dnn.chartOptimalSigma()
 
-    val second = GlobalScope.async { dnn.chartSmallSigma() }
+    dnn.singleNetwork(11, TooBigSigmaGenerator())
+    /*val second = GlobalScope.async { dnn.chartSmallSigma() }
     val third = GlobalScope.async { dnn.chartBigSigma() }
 
     runBlocking {
         second.await()
         third.await()
-    }
+    }*/
 }

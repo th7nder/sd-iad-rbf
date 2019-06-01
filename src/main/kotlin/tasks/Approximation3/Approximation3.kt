@@ -9,8 +9,8 @@ import org.knowm.xchart.style.lines.SeriesLines
 import org.knowm.xchart.style.markers.SeriesMarkers
 
 abstract class Approximation3 {
-    val trainingData = DataLoader.loadFile("approx_train", 1, 1)
-    val testData = DataLoader.loadFile("approx1", 1, 1)
+    val trainingData = DataLoader.loadFile("approx1", 1, 1)
+    val testData = DataLoader.loadFile("approx_test", 1, 1)
     val arguments : List<Double>
 
     init {
