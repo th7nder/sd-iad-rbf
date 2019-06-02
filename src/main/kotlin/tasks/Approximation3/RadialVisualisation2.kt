@@ -59,12 +59,13 @@ class RadialVisualisation2 : Approximation3() {
         Charts.saveChart("$folder/optimal", chart)
     }
 
-    override fun getDisplayIterations() = 1
+    override fun getDisplayIterations() = 100
+    override fun getTrainingIterations() = 5000
 }
 
 fun main() {
     val radialVisualisation2 = RadialVisualisation2()
-//    radialVisualisation2.optimal()
-   // radialVisualisation2.small()
+    radialVisualisation2.optimal()
+    radialVisualisation2.small()
     radialVisualisation2.big()
 }

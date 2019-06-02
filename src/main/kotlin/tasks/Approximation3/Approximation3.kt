@@ -60,10 +60,11 @@ abstract class Approximation3 {
 
     fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
         val network = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
-        network.train(numIterations) { i, error -> if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
+        network.train(getTrainingIterations()) { i, error -> if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
 
         return network
     }
 
     open fun getDisplayIterations() = 500
+    open fun getTrainingIterations() = 6000
 }
