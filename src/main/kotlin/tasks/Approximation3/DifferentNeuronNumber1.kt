@@ -12,16 +12,7 @@ import network.sigmas.TooSmallSigmaGenerator
 import utils.Charts
 
 class DifferentNeuronNumber1 : Approximation3() {
-    val numIterations = 2000
-    val alpha = 0.5
     val folder = "approximation3/1/"
-
-    fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
-        val network = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
-        network.train(numIterations) { i, error -> if (i % 1 == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
-
-        return network
-    }
 
     fun singleSigma(sigmaGenerator: SigmaGenerator) : List<Network> {
         val routines = (1..41 step 10).map { GlobalScope.async {singleNetwork(it, sigmaGenerator)} }

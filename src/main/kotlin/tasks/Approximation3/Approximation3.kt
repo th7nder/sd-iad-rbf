@@ -3,6 +3,8 @@ package tasks.Approximation3
 import files.DataLoader
 import math.*
 import network.Network
+import network.centers.FromDataGenerator
+import network.sigmas.SigmaGenerator
 import org.knowm.xchart.XYChart
 import org.knowm.xchart.XYChartBuilder
 import org.knowm.xchart.style.lines.SeriesLines
@@ -12,6 +14,8 @@ abstract class Approximation3 {
     val trainingData = DataLoader.loadFile("approx1", 1, 1)
     val testData = DataLoader.loadFile("approx_test", 1, 1)
     val arguments : List<Double>
+    val numIterations = 2000
+    val alpha = 0.5
 
     init {
         val from = trainingData.input().minBy { it.x() }!!.x()
@@ -38,10 +42,6 @@ abstract class Approximation3 {
                 .height(800)
                 .title(title).build()
 
-
-
-
-
         val test = chart.addSeries("Dane testowe", testData.input().project(0), testData.output().project(0))
         test.lineStyle = SeriesLines.NONE
         test.marker = SeriesMarkers.CIRCLE
@@ -57,4 +57,13 @@ abstract class Approximation3 {
 
         return chart
     }
+
+    fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
+        val network = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
+        network.train(numIterations) { i, error -> if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
+
+        return network
+    }
+
+    open fun getDisplayIterations() = 500
 }
