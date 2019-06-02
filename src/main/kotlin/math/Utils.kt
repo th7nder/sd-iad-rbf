@@ -13,5 +13,11 @@ class Utils {
 
             return range
         }
+
+        fun standardDeviation(numArray: List<Double>): Double {
+            val mean = numArray.average()
+            val sd = numArray.fold(0.0, { accumulator, next -> accumulator + Math.pow(next - mean, 2.0) })
+            return Math.sqrt(sd / numArray.size)
+        }
     }
 }

@@ -77,7 +77,7 @@ class Network(val numRadialNeurons : Int, var alpha : Double) {
             val currentError = error()
             onIteration?.invoke(i, currentError)
             if (currentError > previousError) {
-                print("Started to grow... Breaking")
+                println("Started to grow... Breaking")
                 break
             }
             previousError = currentError
