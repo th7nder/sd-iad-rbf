@@ -18,7 +18,7 @@ class DifferentNeuronNumber1 : Approximation3() {
 
     fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
         val network = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
-        network.train(numIterations) { i, error -> if (i % 1000 == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
+        network.train(numIterations) { i, error -> if (i % 1 == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
 
         return network
     }
@@ -50,13 +50,14 @@ class DifferentNeuronNumber1 : Approximation3() {
 fun main() {
     val dnn = DifferentNeuronNumber1()
 
+    dnn.singleNetwork(41, EqualSigmaGenerator())
 
-    val first = GlobalScope.async { dnn.chartOptimalSigma() }
+    //val first = GlobalScope.async { dnn.chartOptimalSigma() }
     //val second = GlobalScope.async { dnn.chartSmallSigma() }
     //val third = GlobalScope.async { dnn.chartBigSigma() }
 
     runBlocking {
-        first.await()
+       // first.await()
        // second.await()
        // third.await()
     }

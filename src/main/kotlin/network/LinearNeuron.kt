@@ -51,7 +51,11 @@ class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
         }
 
         for (index in adjustments.indices) {
-            weights[index] -= alpha * (adjustments[index] / inputs.size)
+            adjustments[index] = adjustments[index] / inputs.size
+        }
+
+        for (index in weights.indices) {
+            weights[index] = weights[index] - (alpha * adjustments[index])
         }
     }
 }
