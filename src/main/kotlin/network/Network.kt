@@ -70,9 +70,17 @@ class Network(val numRadialNeurons : Int, var alpha : Double) {
     }
 
     fun train(iters: Int,  onIteration : ((i : Int, error: Double) -> Unit)? = null) {
+        var previousError = error()
         for (i in 1..iters) {
             step()
-            onIteration?.invoke(i, error())
+
+            val currentError = error()
+            onIteration?.invoke(i, currentError)
+            if (currentError > previousError) {
+                print("Started to grow... Breaking")
+                break
+            }
+            previousError = currentError
         }
     }
 
