@@ -40,13 +40,15 @@ abstract class Approximation3 {
 
 
 
-        val trening = chart.addSeries("Dane treningowe", trainingData.input().project(0), trainingData.output().project(0))
-        trening.lineStyle = SeriesLines.NONE
-        trening.marker = SeriesMarkers.CIRCLE
+
 
         val test = chart.addSeries("Dane testowe", testData.input().project(0), testData.output().project(0))
         test.lineStyle = SeriesLines.NONE
         test.marker = SeriesMarkers.CIRCLE
+
+        val trening = chart.addSeries("Dane treningowe", trainingData.input().project(0), trainingData.output().project(0))
+        trening.lineStyle = SeriesLines.NONE
+        trening.marker = SeriesMarkers.CIRCLE
 
         networkOutputs.forEach { (network, outputs) ->
             val series = chart.addSeries("K=${network.numRadialNeurons}", arguments, outputs.project(0))
