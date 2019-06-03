@@ -14,8 +14,7 @@ abstract class Approximation3 {
     val trainingData = DataLoader.loadFile("approx1", 1, 1)
     val testData = DataLoader.loadFile("approx_test", 1, 1)
     val arguments : List<Double>
-    val numIterations = 2000
-    val alpha = 0.5
+    val alpha = 0.01
 
     init {
         val from = trainingData.input().minBy { it.x() }!!.x()
