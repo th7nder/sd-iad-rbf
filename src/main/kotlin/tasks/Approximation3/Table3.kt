@@ -5,6 +5,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import math.Utils
 import network.sigmas.EqualSigmaGenerator
+import java.io.BufferedWriter
+import java.io.FileWriter
 
 class Table3 : Approximation3() {
     fun singleRow(numRadialNeurons: Int) : Statistics {
@@ -48,14 +50,38 @@ class Table3 : Approximation3() {
     }
 
     fun buildTable() : Table {
-        val statistics = (1..41 step 5).map { singleRow(it) }
+        val statistics = (1..41 step 5).map {
+            val statistics = singleRow(it)
+            saveStatistics(statistics)
+            statistics
+        }
+
         return Table(statistics)
     }
 
     val tableIters = 100
+    val folder = "data/approximation3/3"
+
+    fun saveStringToFile(string: String, filename: String) {
+        val writer = FileWriter(filename)
+        writer.write(string)
+        writer.close()
+    }
+
+    fun saveStatistics(statistics: Statistics) {
+        println("-------------- Table Row | Neurons: ${statistics.numRadialNeurons} --------------------------")
+        saveStringToFile(statistics.toString(), "$folder/${statistics.numRadialNeurons}.partial")
+    }
+
+    fun saveTable(table: Table) {
+        println("-------------- Whole table ----------------- ")
+        saveStringToFile(table.toString(), "$folder/table.whole")
+    }
+
+    override fun getDisplayIterations() = 10000
 }
 
 fun main() {
     val table3 = Table3()
-    println(table3.buildTable())
+    table3.saveTable(table3.buildTable())
 }
