@@ -22,8 +22,11 @@ abstract class Approximation3 {
         arguments = Utils.arange(from, to, 0.01)
     }
 
+
+    fun mapNetworkToOutputs(network: Network): Pair<Network, List<Point>> = Pair(network, arguments.map { network.output(Point(it)) })
+
     open fun plotNetwork(title: String, networks: List<Network>) : XYChart {
-        val networkOutputs = networks.map { network -> Pair(network, arguments.map { network.output(Point(it)) }) }
+        val networkOutputs = networks.map(::mapNetworkToOutputs)
 
         return createChart(
             title,
@@ -57,8 +60,11 @@ abstract class Approximation3 {
         return chart
     }
 
+
+    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
+
     fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
-        val network = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
+        val network = createNetwork(numRadialNeurons, sigmaGenerator)
         network.train(getTrainingIterations()) { i, error -> if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
 
         return network
