@@ -58,9 +58,6 @@ class RadialVisualisation2 : Approximation3() {
         val chart = plotNetwork("Sieć RBF - optymalna sigma", arrayListOf(singleNetwork(radialNeurons, EqualSigmaGenerator())))
         Charts.saveChart("$folder/optimal", chart)
     }
-
-    override fun getDisplayIterations() = 100
-    override fun getTrainingIterations() = 5000
 }
 
 fun main() {

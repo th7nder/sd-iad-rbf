@@ -52,8 +52,6 @@ class Table3 : Approximation3() {
         return Table(statistics)
     }
 
-    override fun getTrainingIterations() = 1000
-    override fun getDisplayIterations() = 1000
     val tableIters = 100
 }
 
