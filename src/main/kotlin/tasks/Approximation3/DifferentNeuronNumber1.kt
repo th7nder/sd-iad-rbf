@@ -41,13 +41,13 @@ class DifferentNeuronNumber1 : Approximation3() {
 fun main() {
     val dnn = DifferentNeuronNumber1()
 
-    //val first = GlobalScope.async { dnn.chartOptimalSigma() }
-    //val second = GlobalScope.async { dnn.chartSmallSigma() }
+    val first = GlobalScope.async { dnn.chartOptimalSigma() }
+    val second = GlobalScope.async { dnn.chartSmallSigma() }
     val third = GlobalScope.async { dnn.chartBigSigma() }
 
     runBlocking {
-        //first.await()
-        //second.await()
-       third.await()
+        first.await()
+        second.await()
+        third.await()
     }
 }

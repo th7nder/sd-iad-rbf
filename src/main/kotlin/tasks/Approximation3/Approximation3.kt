@@ -64,6 +64,6 @@ abstract class Approximation3 {
         return network
     }
 
-    open fun getDisplayIterations() = 500
+    open fun getDisplayIterations() = 5000
     open fun getTrainingIterations() = 20000
 }
