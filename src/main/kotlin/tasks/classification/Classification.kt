@@ -3,7 +3,9 @@ package tasks.classification
 import files.DataLoader
 import math.Point
 import network.Network
+import network.centers.CenterGenerator
 import network.centers.FromDataGenerator
+import network.centers.NeuralGasGenerator
 import network.sigmas.EqualSigmaGenerator
 import network.sigmas.SigmaGenerator
 import java.util.*
@@ -18,20 +20,20 @@ class Classification {
         return Point(coordinates)
     }
 
-    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) = Network(numRadialNeurons, 3, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
+    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator) = Network(numRadialNeurons, 3, trainingData, centerGenerator, sigmaGenerator, alpha)
 
-    fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
-        val network = createNetwork(numRadialNeurons, sigmaGenerator)
+    fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator) : Network {
+        val network = createNetwork(numRadialNeurons, sigmaGenerator, centerGenerator)
         network.train(getTrainingIterations()) { i, error -> if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
 
         return network
     }
 
-    open fun getDisplayIterations() = 1
-    open fun getTrainingIterations() = 1000
+    open fun getDisplayIterations() = 100
+    open fun getTrainingIterations() = 5000
 }
 
 fun main() {
     val classification = Classification()
-    classification.singleNetwork(10, EqualSigmaGenerator())
+    classification.singleNetwork(12, EqualSigmaGenerator(), NeuralGasGenerator(10, 0.1, 2.5, 0.5))
 }

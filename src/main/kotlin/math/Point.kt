@@ -6,14 +6,14 @@ fun Collection<Pair<Point, Point>>.input() = map { it.first }
 fun Collection<Pair<Point, Point>>.output() = map { it.second }
 fun Collection<Point>.project(n: Int) = map {it.coordinates[n]}
 
-class Point(n: Int) : Cloneable {
+open class Point(n: Int) : Cloneable {
     val coordinates = DoubleArray(n)
 
     fun x() = coordinates[0]
 
     public override fun clone(): Point {
         val point = Point(coordinates.size)
-        point.setLocation(this)
+        point.update(this)
         return point
     }
 
@@ -24,21 +24,25 @@ class Point(n: Int) : Cloneable {
     }
 
     constructor(coordinates : DoubleArray) : this(coordinates.size) {
-        setLocation(coordinates)
+        update(coordinates)
+    }
+
+    constructor(point: Point) : this(point.dimension()){
+        update(point)
     }
 
     constructor(x: Double) : this(1) {
         coordinates[0] = x
     }
 
-    fun setLocation(coordinates: DoubleArray) {
+    fun update(coordinates: DoubleArray) {
         for ((index, coordinate) in coordinates.withIndex()) {
             this.coordinates[index] = coordinate
         }
     }
 
-    fun setLocation(b: Point) {
-        setLocation(b.coordinates)
+    fun update(b: Point) {
+        update(b.coordinates)
     }
 
     operator fun minus(b: Point) : Point {
@@ -49,6 +53,28 @@ class Point(n: Int) : Cloneable {
         val result = clone()
         for (index in b.coordinates.indices) {
             result.coordinates[index] -= b.coordinates[index]
+        }
+
+        return result
+    }
+
+    operator fun plus(b: Point) : Point {
+        if (coordinates.size != b.coordinates.size) {
+            throw IllegalArgumentException("calculate point in different dimensions")
+        }
+
+        val result = clone()
+        for (index in b.coordinates.indices) {
+            result.coordinates[index] += b.coordinates[index]
+        }
+
+        return result
+    }
+
+    operator fun times(b: Double) : Point {
+        val result = clone()
+        for (index in coordinates.indices) {
+            result.coordinates[index] *= b
         }
 
         return result
@@ -66,8 +92,6 @@ class Point(n: Int) : Cloneable {
     }
 
     fun sum() : Double = coordinates.sum()
-
-
 
     fun dimension() = coordinates.size
 
