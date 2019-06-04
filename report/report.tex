@@ -31,28 +31,40 @@
   \end{tabular}
 
 Symbol $\alpha$ będzie oznaczał współczynnik nauki, a $K$ liczbę centrów.
+Współczynnik skalujący w sieci będzie nazywany sigmą.
 
 \section{Osobna nauka warstw - Aproksymacja}
 Do nauki wykorzystano następujące parametry: $\alpha=0.05$, liczba iteracji $= 20000$.
+Optymalną sigmę uzyskano ze wzoru:
+\begin{equation}
+  \sigma = \frac{d}{\sqrt{2M}}
+\end{equation}
+Gdzie $d$ - maksymalna odległość między centrami, a $M$ to liczba centrów.
 \subsection{Podzadanie 1}
 
 \begin{figure}[!htb]
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/approximation3/1/small.png}
-    \caption{Za mała sigma}
+    \caption{\label{fig:1small}Za mała sigma}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/approximation3/1/optimal.png}
-    \caption{Optymalna sigma}
+    \caption{\label{fig:1optimal}Optymalna sigma}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/approximation3/1/big.png}
-    \caption{Za duża sigma}
+    \caption{\label{fig:1big}Za duża sigma}
   \end{minipage}\hfill
 \end{figure}
+Dla liczby $K >= 11$, gdy współczynnik skalujący 
+jest zbyt mały sieć przybliża dane treningowe do pewnego stopnia, 
+jednak tworzy pewne zakłócenia, co daje niedokładne przybliżenie.
+Z drugiej strony, gdy sigma jest zbyt duża sieć praktycznie wcale nie aproksymuje danych jedynie je przecina w pewien sposób.
+Sieć o $K=1$ daje takie same wyniki, jak $K=41$.
+Gdy sigma jest optymalna, sieć o każdej liczbie neuronów oprócz $K=1$, aproksymuje tak samo dokładnie.
 
 \subsection{Podzadanie 2}
 
@@ -61,19 +73,24 @@ Czerwone linie reprezentują funkcje pojedynczych neuronów.
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/approximation3/2/small.png}
-    \caption{Za mała sigma}
+    \caption{\label{fig:2small}Za mała sigma}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/approximation3/2/optimal.png}
-    \caption{Optymalna sigma}
+    \caption{\label{fig:2optimal}Optymalna sigma}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/approximation3/2/big.png}
-    \caption{Za duża sigma}
+    \caption{\label{fig:2big}Za duża sigma}
   \end{minipage}\hfill
 \end{figure}
+Na podstawie poprzednich wyników wybrano $K=11$. Na Rysunku \ref{fig:2small} widać powód zakłóceń wykrytych na Rysunku \ref{fig:1small}.
+Gdy sigma jest za mała funkcje aktywacji neuronów mają zbyt wąski obszar aktywacji przez co tworzą funkcje sieci, która przypomina sinusoide.
+Z drugiej strony na Rysunku \ref{fig:2big} widać, że przy dużym współczynniku skalującym funkcje neuronów są prawie stałe.
+Nie da się stworzyć z kombinacji funkcji stałych dowolnej funkcji, co wyjaśnia wykres \ref{fig:1big}.
+Jeśli zaś dobierzemy sigmę optymalnie, neurony będą realizowały funkcje nie za wąską i nie ze szeroką, co umożliwi bardzo dokładną aproksymację.
 
 
 \subsection{Podzadanie 3}
@@ -98,15 +115,37 @@ Symbol $\sigma$ w Tabeli \ref{table:approx3} oznacza odchylenie standardowe.
     \hline
   \end{tabular}
 \end{table}
+Losowy wybór centrów neuronów wprowadza dodatkowy błąd do sieci, 
+gdyż przy małej ich liczbie mogą one zostać rozłożone nierównomiernie po całym zbiorze.
+Wynika stąd bardzo duże odchylenie standardowe dla $K=1,6,11$.
+Gdy $K=11$, błąd jest już relatywnie mały jednak nauka jest niestabilna, przez wspomnianie losowanie centrów.
+Zauważmy, że dla $K=16$, błąd zmniejsza się już dwukrotnie, a odchylenie standardowe jest bardzo małe.
+Taka liczba neuronów zapewnia już reprezentatywność danych treningowych.
+Przy $K=26,31,36,41$ średni błąd i odchylenie zmienia się nieznacząco w stosunku do $K=16$.
+Za duża liczba neuronów nie zwiększa znacząco możliwości aproksymacyjnych sieci.
+Błąd i odchylenie na zbiorze testowym zawsze jest większe niż na zbiorze treningowym.
 
 \subsection{Podzadanie 4}
 \begin{figure}[!htb]
   \centering
   \begin{minipage}{0.5\textwidth}
     \includegraphics[width=1\linewidth]{../data/approximation3/4/chart.png}
-    \caption{Zmiana funkcji sieci w różnych momentach}
+    \caption{\label{fig:4chart}Zmiana funkcji sieci w różnych momentach}
   \end{minipage}\hfill
 \end{figure}
 
+Na podstawie obserwacji z Tabeli \ref{table:approx3},
+Rysunek \ref{fig:4chart} został wygenerowany z parametrami $K=16$, liczba iteracji $= 5000$.
+Można na nim wyraźnie zaobserwować, że już po $2000$ iteracji funkcja realizowana przez sieć wyglądała tak samo jak dla $i=5000$.
+Gdy błąd przestanie się znacząco zmniejszać należy przestać uczyć sieć, gdyż nie da to lepszych efektów.
+
+\subsection{Podsumowanie}
+\begin{itemize}
+  \item Błąd średniokwadratowy z każdą iteracją spada dosyć szybko, jednak w pewnym momencie osiąga próg, po którym dalsze uczenie sieci nie daje znaczących efektów.
+  \item Potrzebna liczba neuronów w warstwie radialnej jest zależna od charakterystyki danych jakie aproksymujemy. Za mała nie przybliży jej wcale, a za duża daje prawie takie same wyniki jak optymalna, którą należy dobrać eksperymentalnie.
+  \item Sieć można uznać za nauczoną, gdy jej błąd przestanie znacząco maleć. Zależy to od charakterystyki danych. Jest to dosyć ważny aspekt, gdyż wtedy można trenować sieć np. przy 5000 iteracjach, a nie 20000 iteracji, co zabiera czas i moc obliczeniową.
+  \item Jeśli centra zostaną źle wylosowane to błąd znacząco się zwiększa, dlatego należy wybierać taką ich liczbe aby minimalizować błąd stworzony przez losowanie.
+  \item Współczynnik skalujący ma ogromny wpływ na funkcje realizowaną przez sieć, gdy dobierzemy go źle to przy za małej wartości sieć będzie niedokładna. Przy za dużym współczynniku nie będzie aproksymowała wcale. Należy go dobierać tak, aby był optymalny.
+\end{itemize}
 
 \end{document}
