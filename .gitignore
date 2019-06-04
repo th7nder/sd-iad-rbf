@@ -42,3 +42,14 @@ node_modules/
 .rpt2_cache/
 libraries/tools/kotlin-test-nodejs-runner/lib/
 local.properties
+*.aux
+*.log
+*.out
+__pycache__
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+bin
+.classpath
+.project 
+.settings
