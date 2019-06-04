@@ -1,11 +1,10 @@
-package tasks.Approximation3
+package tasks.approximation
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import math.Utils
 import network.sigmas.EqualSigmaGenerator
-import java.io.BufferedWriter
 import java.io.FileWriter
 
 class Table3 : Approximation3() {

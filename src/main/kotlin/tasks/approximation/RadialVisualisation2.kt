@@ -1,4 +1,4 @@
-package tasks.Approximation3
+package tasks.approximation
 
 import math.Point
 import network.Network

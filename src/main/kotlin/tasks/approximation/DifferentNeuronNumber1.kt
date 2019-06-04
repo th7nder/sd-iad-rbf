@@ -1,10 +1,9 @@
-package tasks.Approximation3
+package tasks.approximation
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import network.Network
-import network.centers.FromDataGenerator
 import network.sigmas.EqualSigmaGenerator
 import network.sigmas.SigmaGenerator
 import network.sigmas.TooBigSigmaGenerator
