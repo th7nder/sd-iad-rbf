@@ -87,10 +87,10 @@ Czerwone linie reprezentują funkcje pojedynczych neuronów.
   \end{minipage}\hfill
 \end{figure}
 Na podstawie poprzednich wyników wybrano $K=11$. Na Rysunku \ref{fig:2small} widać powód zakłóceń wykrytych na Rysunku \ref{fig:1small}.
-Gdy sigma jest za mała funkcje aktywacji neuronów mają zbyt wąski obszar aktywacji przez co tworzą funkcje sieci, która przypomina sinusoide.
+Gdy sigma jest za mała funkcje aktywacji neuronów mają zbyt wąski obszar aktywacji.
 Z drugiej strony na Rysunku \ref{fig:2big} widać, że przy dużym współczynniku skalującym funkcje neuronów są prawie stałe.
-Nie da się stworzyć z kombinacji funkcji stałych dowolnej funkcji, co wyjaśnia wykres \ref{fig:1big}.
-Jeśli zaś dobierzemy sigmę optymalnie, neurony będą realizowały funkcje nie za wąską i nie ze szeroką, co umożliwi bardzo dokładną aproksymację.
+Nie da się stworzyć z kombinacji funkcji stałych dowolnej funkcji.
+Jeśli zaś dobierzemy sigmę optymalnie, neurony będą realizowały funkcje nie za wąską i nie ze szeroką, co umożliwi bardzo dokładną aproksymację jak na Rysunku \ref{fig:2optimal}.
 
 
 \subsection{Podzadanie 3}
@@ -118,7 +118,7 @@ Symbol $\sigma$ w Tabeli \ref{table:approx3} oznacza odchylenie standardowe.
 Losowy wybór centrów neuronów wprowadza dodatkowy błąd do sieci, 
 gdyż przy małej ich liczbie mogą one zostać rozłożone nierównomiernie po całym zbiorze.
 Wynika stąd bardzo duże odchylenie standardowe dla $K=1,6,11$.
-Gdy $K=11$, błąd jest już relatywnie mały jednak nauka jest niestabilna, przez wspomnianie losowanie centrów.
+Gdy $K=11$, błąd jest już relatywnie mały jednak nauka jest niestabilna, przez wspomniane losowanie centrów.
 Zauważmy, że dla $K=16$, błąd zmniejsza się już dwukrotnie, a odchylenie standardowe jest bardzo małe.
 Taka liczba neuronów zapewnia już reprezentatywność danych treningowych.
 Przy $K=26,31,36,41$ średni błąd i odchylenie zmienia się nieznacząco w stosunku do $K=16$.
