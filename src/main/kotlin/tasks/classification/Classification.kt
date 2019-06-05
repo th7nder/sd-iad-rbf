@@ -64,7 +64,7 @@ open class Classification {
         return Point(coordinates)
     }
 
-    private fun percentage(data: DataSet, network: Network) : Double {
+    fun percentage(data: DataSet, network: Network) : Double {
         var classified = 0
         for (pair in data) {
             val output = network.output(pair.first).coordinates
