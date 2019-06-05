@@ -19,5 +19,16 @@ class Utils {
             val sd = numArray.fold(0.0, { accumulator, next -> accumulator + Math.pow(next - mean, 2.0) })
             return Math.sqrt(sd / numArray.size)
         }
+
+        fun argmax(arr: DoubleArray) : Int {
+            var maxIndex = 0
+            for (index in arr.indices) {
+                if (arr[index] > arr[maxIndex]) {
+                    maxIndex = index
+                }
+            }
+
+            return maxIndex
+        }
     }
 }
