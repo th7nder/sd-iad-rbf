@@ -148,4 +148,38 @@ Gdy błąd przestanie się znacząco zmniejszać należy przestać uczyć sieć
   \item Współczynnik skalujący ma ogromny wpływ na funkcje realizowaną przez sieć, gdy dobierzemy go źle to przy za małej wartości sieć będzie niedokładna. Przy za dużym współczynniku nie będzie aproksymowała wcale. Należy go dobierać tak, aby był optymalny.
 \end{itemize}
 
+\section{Nauka obu warstw}
+\begin{equation}
+  \frac{\partial E}{\partial{\sigma_k}} = \frac{1}{N} \sum_{j=1}^{N}  (f(x^j) - y^j) z_k(x^j) d^2(x^j, c_k) \frac{1}{\sigma_{k}^3}
+\end{equation}
+\subsection{Pochodna po koordynacie centrum neuronu}
+\begin{align}
+  \frac{\partial E}{\partial{c_{k,i}}} &= \frac{1}{2N} \sum_{j=1}^{N} (f(x^j) - y^j)^2\\
+  &= \frac{1}{2N} \sum_{j=1}^{N} 2 f(x^j - y^j) f'(x^j)\\
+  &= \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) \frac{\partial}{\partial{c_{k,i}}} \sum_{k=0}^{K} w_k z_k(x^j)
+\end{align}
+\begin{equation}
+  \frac{\partial}{\partial{c_{k,i}}} \sum_{k=0}^{K} w_k z_k(x^j) = \sum_{k=0}^{K} w_k z_k(x^j) =  w_k \frac{\partial}{\partial{c_{k,i}}}z_k(x^j)
+\end{equation}
+Ponieważ tylko $w_k \frac{\partial}{\partial{c_{k,i}}}z_k(x^j)$ zależy od $c_{k,i}$, dla $k=1, ..., K$
+\begin{align}
+  w_k \frac{\partial}{\partial{c_{k,i}}}z_k(x^j) &= w_k \frac{\partial}{\partial{c_{k,i}}} exp(-d^2(x^j, c_k) \frac{1}{2\sigma_k^2})\\
+    &= w_k z_k(x^j) \frac{\partial}{\partial{c_{k,i}}} -d^2(x^j, c_k) \frac{1}{2\sigma_k^2}\\
+    &= w_k z_k(x^j) \frac{-1}{2\sigma_k^2} \frac{\partial}{\partial{c_{k,i}}} d^2(x^j, c_k) \\
+  \frac{\partial}{\partial{c_{k,i}}} d^2(x^j, c_k) &= \frac{\partial}{\partial{c_{k,i}}} \sqrt{\sum_{i = 1}^{n} (x_i - c_{k,i})^2}^2\\
+  &= \frac{\partial}{\partial{c_{k,i}}} \sum_{i = 1}^{n} (x_i - c_{k,i})^2\\
+  &= \sum_{i = 1}^{n} 2 (x_i - c_{k,i}) (-1)\\
+  &= -2 \sum_{i = 1}^{n} (x_i - c_{k,i})\\
+  &= -2 (x_i - c_{k,i})
+\end{align}
+Ponieważ tylko $x_i - c_{k,i}$ zależy od $c_{k,i}$.
+\begin{align}
+  w_k z_k'(x^j) &= w_k z_k(x^j) \frac{-1}{2\sigma_k^2} -2 (x_i - c_{k,i})\\
+  w_k z_k'(x^j) &= w_k z_k(x^j) \frac{1}{\sigma_k^2} (x_i - c_{k,i})\\
+\end{align}
+Ostateczny wzór:
+\begin{equation}
+\frac{\partial E}{\partial{c_{k,i}}} = \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) w_k z_k(x^j) \frac{1}{\sigma_k^2} (x_i - c_{k,i})
+\end{equation}
+
 \end{document}
