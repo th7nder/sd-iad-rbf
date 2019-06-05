@@ -1,5 +1,6 @@
 package tasks.approximation
 
+import files.Utils.Companion.saveStringToFile
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -61,18 +62,11 @@ class Table3 : Approximation3() {
     val tableIters = 100
     val folder = "data/approximation3/3"
 
-    fun saveStringToFile(string: String, filename: String) {
-        val writer = FileWriter(filename)
-        writer.write(string)
-        writer.close()
-    }
-
-    fun saveStatistics(statistics: Statistics) {
-        println("-------------- Table Row | Neurons: ${statistics.numRadialNeurons} --------------------------")
+    private fun saveStatistics(statistics: Statistics) {
         saveStringToFile(statistics.toString(), "$folder/${statistics.numRadialNeurons}.partial")
     }
 
-    fun saveTable(table: Table) {
+   fun saveTable(table: Table) {
         println("-------------- Whole table ----------------- ")
         saveStringToFile(table.toString(), "$folder/table.whole")
     }

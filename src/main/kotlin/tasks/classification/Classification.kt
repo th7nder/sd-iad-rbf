@@ -80,24 +80,21 @@ open class Classification {
     }
 
     fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator, dataSet: DataSet) = Network(numRadialNeurons, 3, dataSet, centerGenerator, sigmaGenerator, alpha)
-
     fun createNetwork(numRadialNeurons: Int, trainingDataSet: DataSet) = createNetwork(numRadialNeurons, EqualSigmaGenerator(), KAverageGenerator(kAverageIterations), trainingDataSet)
 
-    fun createNetwork(numRadialNeurons: Int) = createNetwork(numRadialNeurons, EqualSigmaGenerator(), KAverageGenerator(kAverageIterations), trainingData)
-
-    fun singleNetwork(numRadialNeurons: Int) : Network {
-        val network = createNetwork(numRadialNeurons)
+    fun singleNetwork(numRadialNeurons: Int, trainingDataSet: DataSet = trainingData) : Network {
+        val network = createNetwork(numRadialNeurons, trainingDataSet)
         network.train(getTrainingIterations()) {
                 i, error ->
-            if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error | classify: ${percentage(trainingData, network)}")
+            if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error | classify: ${percentage(trainingDataSet, network)}")
         }
 
         return network
     }
 
 
-    open fun getDisplayIterations() = 500
-    open fun getTrainingIterations() = 10000
+    open fun getTrainingIterations(): Int = 5000
+    open fun getDisplayIterations(): Int = 1000
 }
 
 fun main() {
