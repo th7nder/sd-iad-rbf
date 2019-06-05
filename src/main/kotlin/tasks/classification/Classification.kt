@@ -5,18 +5,19 @@ import math.Point
 import math.Utils
 import network.Network
 import network.centers.CenterGenerator
-import network.centers.FromDataGenerator
 import network.centers.KAverageGenerator
-import network.centers.NeuralGasGenerator
 import network.sigmas.EqualSigmaGenerator
 import network.sigmas.SigmaGenerator
 import java.util.*
 
 typealias DataSet = ArrayList<Pair<Point, Point>>
+typealias Combination = Pair<Int, List<Int>>
 
-class Classification {
+open class Classification {
     val trainingData = DataLoader.loadFile("classification_train", 4, ::intToPointParser)
-    val alpha = 0.01
+    val testData = DataLoader.loadFile("classification_test", 4, ::intToPointParser)
+    val alpha = 0.05
+    val kAverageIterations = 10
 
     val combinations = arrayListOf(
         Pair(1, listOf(1)),
@@ -75,13 +76,17 @@ class Classification {
             }
         }
 
-        return classified / trainingData.size.toDouble()
+        return classified / data.size.toDouble()
     }
 
-    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator) = Network(numRadialNeurons, 3, trainingData, centerGenerator, sigmaGenerator, alpha)
+    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator, dataSet: DataSet) = Network(numRadialNeurons, 3, dataSet, centerGenerator, sigmaGenerator, alpha)
 
-    fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator) : Network {
-        val network = createNetwork(numRadialNeurons, sigmaGenerator, centerGenerator)
+    fun createNetwork(numRadialNeurons: Int, trainingDataSet: DataSet) = createNetwork(numRadialNeurons, EqualSigmaGenerator(), KAverageGenerator(kAverageIterations), trainingDataSet)
+
+    fun createNetwork(numRadialNeurons: Int) = createNetwork(numRadialNeurons, EqualSigmaGenerator(), KAverageGenerator(kAverageIterations), trainingData)
+
+    fun singleNetwork(numRadialNeurons: Int) : Network {
+        val network = createNetwork(numRadialNeurons)
         network.train(getTrainingIterations()) {
                 i, error ->
             if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error | classify: ${percentage(trainingData, network)}")
@@ -98,8 +103,6 @@ class Classification {
 fun main() {
     val classification = Classification()
     classification.singleNetwork(
-        20,
-        EqualSigmaGenerator(),
-        KAverageGenerator(10)
+        20
     )
 }
