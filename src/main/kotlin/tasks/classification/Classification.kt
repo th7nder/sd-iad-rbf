@@ -20,11 +20,40 @@ class Classification {
         return Point(coordinates)
     }
 
+    private fun argmax(arr: DoubleArray) : Int {
+        var maxIndex = 0
+        for (index in arr.indices) {
+            if (arr[index] > arr[maxIndex]) {
+                maxIndex = index
+            }
+        }
+
+        return maxIndex
+    }
+
+    private fun percentage(network: Network) : Double {
+        var classified = 0
+        for (data in trainingData) {
+            val output = network.output(data.first).coordinates
+            val expected = data.second.coordinates
+            val maxIndex = argmax(output)
+
+            if (expected[maxIndex].toInt() == 1) {
+                classified += 1
+            }
+        }
+
+        return classified / trainingData.size.toDouble()
+    }
+
     fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator) = Network(numRadialNeurons, 3, trainingData, centerGenerator, sigmaGenerator, alpha)
 
     fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator) : Network {
         val network = createNetwork(numRadialNeurons, sigmaGenerator, centerGenerator)
-        network.train(getTrainingIterations()) { i, error -> if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error")}
+        network.train(getTrainingIterations()) {
+                i, error ->
+            if (i % getDisplayIterations() == 0) println("Radial neurons: $numRadialNeurons | iteration: $i | error: $error | classify: ${percentage(network)}")
+        }
 
         return network
     }
@@ -35,5 +64,5 @@ class Classification {
 
 fun main() {
     val classification = Classification()
-    classification.singleNetwork(12, EqualSigmaGenerator(), NeuralGasGenerator(10, 0.1, 2.5, 0.5))
+    classification.singleNetwork(10, EqualSigmaGenerator(), NeuralGasGenerator(10, 0.1, 2.5, 0.5))
 }
