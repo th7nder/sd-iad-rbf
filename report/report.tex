@@ -149,8 +149,28 @@ Gdy błąd przestanie się znacząco zmniejszać należy przestać uczyć sieć
 \end{itemize}
 
 \section{Nauka obu warstw}
+\newcommand{\partialSigma}{\frac{\partial}{\partial{\sigma_{k}}}}
 \begin{equation}
-  \frac{\partial E}{\partial{\sigma_k}} = \frac{1}{N} \sum_{j=1}^{N}  (f(x^j) - y^j) z_k(x^j) d^2(x^j, c_k) \frac{1}{\sigma_{k}^3}
+  \partialSigma = \frac{1}{N} \sum_{j=1}^{N}  (f(x^j) - y^j) z_k(x^j) d^2(x^j, c_k) \frac{1}{\sigma_{k}^3}
+\end{equation}
+\subsection{Pochodna po współczynniku skalującym}
+\begin{align}
+  \frac{\partial E}{\partial{\sigma_{k}}}&= \frac{1}{2N} \sum_{j=1}^{N} (f(x^j) - y^j)^2\\
+  &= \frac{1}{2N} \sum_{j=1}^{N} 2 (f(x^j) - y^j) f'(x^j)\\
+  &= \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) \partialSigma \sum_{k=0}^{K} w_k z_k(x^j)\\
+  \partialSigma \sum_{k=0}^{K} w_k z_k(x^j) &= \sum_{k=0}^{K} w_k z_k(x^j) =  w_k \frac{\partial}{\partial{\sigma_{k}}}z_k(x^j)
+\end{align}
+Ponieważ tylko $w_k \partialSigma z_k(x^j)$ zależy od $\sigma_k$, dla $k=0, ..., K$
+\begin{align}
+  \frac{\partial}{\partial{\sigma_{k}}}z_k(x^j) &= \partialSigma exp(-d^2(x^j, c_k) \frac{1}{2\sigma_k^2})\\
+  &= z_k(x^j) \partialSigma ( \frac{1}{2\sigma_k^2}) \\
+  &= z_k(x^j) \frac{-1}{2} d^2(x^j, c_k) \partialSigma {\sigma_k^{-2}}\\
+  &= z_k(x^j) \frac{-1}{2} d^2(x^j, c_k) -2 \sigma_k^{-3}\\
+  &= z_k(x^j) d^2(x^j, c_k) \frac{1}{\sigma_k^3}
+\end{align}
+Ostatecznie
+\begin{equation}
+  \frac{\partial E}{\partial{\sigma_{k}}} = \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) z_k(x^j) w_k d^2(x^j, c_k) \frac{1}{\sigma_k^3}
 \end{equation}
 \subsection{Pochodna po koordynacie centrum neuronu}
 \begin{align}
