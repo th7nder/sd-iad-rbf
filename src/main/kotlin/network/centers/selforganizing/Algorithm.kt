@@ -5,7 +5,7 @@ import network.centers.selforganizing.common.Assigner
 import network.centers.selforganizing.common.Centroid
 
 
-abstract class Algorithm(val name: String) {
+abstract class Algorithm {
     private val assigner = Assigner()
     var data : List<Point> = ArrayList()
     var centroids : List<Centroid> = ArrayList()

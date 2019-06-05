@@ -6,6 +6,7 @@ import math.Utils
 import network.Network
 import network.centers.CenterGenerator
 import network.centers.FromDataGenerator
+import network.centers.KAverageGenerator
 import network.centers.NeuralGasGenerator
 import network.sigmas.EqualSigmaGenerator
 import network.sigmas.SigmaGenerator
@@ -90,16 +91,15 @@ class Classification {
     }
 
 
-    open fun getDisplayIterations() = 100
+    open fun getDisplayIterations() = 500
     open fun getTrainingIterations() = 10000
 }
 
 fun main() {
     val classification = Classification()
-    //val x = classification.projectData(classification.trainingData, classification.combinations[4])
     classification.singleNetwork(
-        10,
+        20,
         EqualSigmaGenerator(),
-        NeuralGasGenerator(10, 0.1, 1.0, 0.1)
+        KAverageGenerator(10)
     )
 }

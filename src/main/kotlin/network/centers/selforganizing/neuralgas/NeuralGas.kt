@@ -5,7 +5,7 @@ import network.centers.selforganizing.Algorithm
 import network.centers.selforganizing.common.Centroid
 import network.centers.selforganizing.common.Influencer
 
-class NeuralGas() : Algorithm("Gaz neuronowy") {
+class NeuralGas() : Algorithm() {
     lateinit var influencer : Influencer
     lateinit var alpha : (it: Int) -> Double
 
