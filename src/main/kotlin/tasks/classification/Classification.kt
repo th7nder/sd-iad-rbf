@@ -91,11 +91,15 @@ class Classification {
 
 
     open fun getDisplayIterations() = 100
-    open fun getTrainingIterations() = 5000
+    open fun getTrainingIterations() = 10000
 }
 
 fun main() {
     val classification = Classification()
-    val x = classification.projectData(classification.trainingData, classification.combinations.first())
-    //classification.singleNetwork(10, EqualSigmaGenerator(), NeuralGasGenerator(10, 0.1, 2.5, 0.5))
+    //val x = classification.projectData(classification.trainingData, classification.combinations[4])
+    classification.singleNetwork(
+        10,
+        EqualSigmaGenerator(),
+        NeuralGasGenerator(10, 0.1, 1.0, 0.1)
+    )
 }
