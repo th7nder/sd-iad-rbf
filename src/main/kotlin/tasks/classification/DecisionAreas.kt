@@ -101,6 +101,7 @@ class DecisionAreas : Classification() {
             val series = chart.addSeries("Klasa ${index + 1} v2", data.project(0), data.project(1))
             series.lineStyle = SeriesLines.NONE
             series.markerColor = colors[index]
+            series.isShowInLegend = false
         }
 
 
