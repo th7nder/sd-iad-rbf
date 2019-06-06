@@ -26,6 +26,7 @@ open class Classification {
         Pair(1, listOf(4)),
         Pair(2, listOf(2, 3)),
         Pair(2, listOf(3, 4)),
+        Pair(2, listOf(1, 2)),
         Pair(2, listOf(1, 3)),
         Pair(2, listOf(1, 4)),
         Pair(2, listOf(2, 4)),
