@@ -7,6 +7,7 @@
 \usepackage{listings}
 \usepackage{subcaption}
 \usepackage{numprint}
+\usepackage{siunitx}
 \usepackage[justification=centering]{caption}
 \usepackage[margin=0.5in]{geometry}
 \npdecimalsign{.}
@@ -149,6 +150,8 @@ Gdy błąd przestanie się znacząco zmniejszać należy przestać uczyć sieć
 \end{itemize}
 
 \section{Osobna nauka warstw - klasyfikacja}
+Wykorzystano parametry nauki: $\alpha=0.05$, optymalna sigma, liczba iteracji $=5000$.
+Centra dobierano za pomocą algorytmu K-Średnich.
 \subsection{Podzadanie 1}
 \begin{figure}[!htb]
   \begin{minipage}{0.33\textwidth}
@@ -235,6 +238,31 @@ Gdy błąd przestanie się znacząco zmniejszać należy przestać uczyć sieć
     \caption{\label{fig:41_4_1,2,3,4}}
   \end{minipage}\hfill
 \end{figure}
+
+\nprounddigits{2}
+\subsection{Podzadanie 2}
+W Tabeli \ref{table:classify4} $p_a$, $p_b$ oznaczają odpowiednio procent klasyfikacji dla zbioru treningowego i testowego.
+\begin{table}[h!]
+  \caption{\label{table:classify4}Procent klasyfikacji oraz odchylenie dla zbioru treningowego i testowego dla 100 prób nauki}
+  \centering
+  \begin{tabular}{|l|n{1}{3}|n{1}{3}|n{1}{3}|n{1}{3}|}
+    \hline
+    \textbf{K} & \textbf{$avg(p_a)$} & \textbf{$\sigma(p_a)$} & \textbf{$avg(p_b)$} & \textbf{$\sigma(p_b)$} \\
+    \hline
+    1 & 0.6666666666666659 & 0 & 0.6666666666666659 & 0 \\
+    6 & 0.935111111111111 & 0.0053794304164045135 & 0.928494623655913 & 0.009542064166289733 \\
+    11 & 0.9368888888888887 & 0.005183068350973578 & 0.9307526881720424 & 0.01057049955048994 \\
+    16 & 0.9371111111111108 & 0.006130272988503856 & 0.9308602150537629 & 0.01056338744688961 \\
+    21 & 0.9378888888888883 & 0.006866450913546816 & 0.9324731182795698 & 0.01043398664146946 \\
+    26 & 0.9398888888888883 & 0.0056862407030773094 & 0.9349462365591399 & 0.010129808430869264 \\
+    31 & 0.9422222222222213 & 0.004444444444444427 & 0.9375268817204311 & 0.010051894484440608 \\
+    36 & 0.9423333333333324 & 0.004358898943540653 & 0.9377419354838716 & 0.010676612602035777 \\
+    41 & 0.9429999999999988 & 0.004622809791714378 & 0.9398924731182804 & 0.010869792434046578 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Podzadanie 3}
 
 
 \section{Nauka obu warstw}
