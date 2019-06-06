@@ -288,38 +288,50 @@ Dla $K >= 6$ skuteczność nie zmienia się, tyle neuronów wystarczy aby klasyf
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/classification4/3/2_1,2.png}
-    \caption{\label{fig:42_2_1,2}}
+    \caption{\label{fig:43_2_1,2}}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/classification4/3/2_1,3.png}
-    \caption{\label{fig:42_2_1,3}}
+    \caption{\label{fig:43_2_1,3}}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/classification4/3/2_1,4.png}
-    \caption{\label{fig:42_2_1,4}}
+    \caption{\label{fig:43_2_1,4}}
   \end{minipage}\hfill
 \end{figure}
 \begin{figure}[!htb]
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/classification4/3/2_2,3.png}
-    \caption{\label{fig:42_2_2,3}}
+    \caption{\label{fig:43_2_2,3}}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/classification4/3/2_2,4.png}
-    \caption{\label{fig:42_2_2,4}}
+    \caption{\label{fig:43_2_2,4}}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/classification4/3/2_3,4.png}
-    \caption{\label{fig:42_2_3,4}}
+    \caption{\label{fig:43_2_3,4}}
   \end{minipage}\hfill
 \end{figure}
 
+Zaokrąglone obszary wyznaczane na Rysunkach \ref{fig:43_2_1,2} - \ref{fig:43_2_3,4}
+przypominają kształtem funkcję gaussowską neuronów radialnych.
+Na granicach obszarów decyzyjnych zachodzą niejednoznaczności w klasyfikacji.
+Po redukcji, gdy współrzędne w odpowiednich osiach mają taką samą wartość nie ma sposobu na odróżnienie obiektów.
 
+\subsection{Podsumowanie}
+\begin{itemize}
+  \item Skuteczność sieci zmienia się skokowo, jest bardzo zbliżona na zbiorze treningowym i testowym.
+  \item Większa liczba neuronów nie oznacza zwiększenia skuteczności klasyfikacji. Optymalna liczba zależy od charakterystyki zbioru.
+  \item Redukcja wektora wejściowego do różnych kombinacji współrzędnych może wyłonić współrzędne reprezentatywne. Dzięki czemu będzie można rozpoznać obiekty po 1 z cech.
+  \item Gdy znajdziemy jedną cechę charakterystyczną, dodanie większej ich liczby nie zwiększy znacząco skuteczności.
+  \item Sieć po pewnej liczbie iteracji przestaje się uczyć - procent skuteczności przestaje rosnąć.
+\end{itemize}
 \section{Nauka obu warstw}
 \newcommand{\partialSigma}{\frac{\partial}{\partial{\sigma_{k}}}}
 \begin{equation}
