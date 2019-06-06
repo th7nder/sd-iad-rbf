@@ -63,6 +63,7 @@ open class Classification {
         Collections.rotate(coordinates, value - 1)
         return Point(coordinates)
     }
+    
 
     fun percentage(data: DataSet, network: Network) : Double {
         var classified = 0
