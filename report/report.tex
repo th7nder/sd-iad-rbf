@@ -170,6 +170,23 @@ Centra dobierano za pomocą algorytmu K-Średnich.
     \caption{\label{fig:41_1_3}}
   \end{minipage}\hfill
 \end{figure}
+
+Dla cech (wejść) 1,2 przedstawionych na Rysunkach \ref{fig:41_1_1}, \ref{fig:41_1_2}, 
+skuteczność klasyfikacji stosunkowo niska - 60-70\% niezależnie od $K$. 
+Nie są one reprezentatywne. Z drugiej strony dla cech 3,4 na Rysunkach \ref{fig:41_1_3}, \ref{fig:41_1_4}
+skutecnzość sięga 95\% dla $K >= 11$. Większa liczba neuronów niż $11$ nie zwiększa skuteczności.
+Na podstawie jednej wybranej cechy z czterech można dokonać bardzo dobrej klasyfikacji.
+
+Na Rysunku \ref{fig:41_2_1,2} widać, że po połączeniu 2 słabo reprezentatywnych cech,
+można zwiększyć zdolności sieci o około 15\%. Jednak kombinacja dwóch najbardziej charakterystycznych cech 
+na Rysunku \ref{fig:41_2_3,4} jest skuteczniejsza o tylko 1\%. 
+
+Kombinacje 3 wejść na rysunkach \ref{fig:41_3_1,2,3} - \ref{fig:41_3_2,3,4} oraz 4 wejść na Rysunku \ref{fig:41_4_1,2,3,4} 
+również nie polepszają klasyfikacji.
+
+Skuteczność dla każdej z możliwych kombinacji rośnie skokowo. Jeśli cecha nie jest charakterystyczna to czasami nawet spada jak na Rysunku \ref{fig:41_1_2}.
+Po około 3000 iteracji przestaje rosnąć i zatrzymuje się w miejscu.
+
 \begin{figure}[!htb]
   \begin{minipage}{0.33\textwidth}
     \centering
@@ -208,7 +225,7 @@ Centra dobierano za pomocą algorytmu K-Średnich.
   \begin{minipage}{0.33\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{../data/classification4/1/2_3,4.png}
-    \caption{\label{fig:41_2_2,3}}
+    \caption{\label{fig:41_2_3,4}}
   \end{minipage}
   \begin{minipage}{0.33\textwidth}
     \centering
@@ -241,7 +258,6 @@ Centra dobierano za pomocą algorytmu K-Średnich.
 
 \nprounddigits{2}
 \subsection{Podzadanie 2}
-W Tabeli \ref{table:classify4} $p_a$, $p_b$ oznaczają odpowiednio procent klasyfikacji dla zbioru treningowego i testowego.
 \begin{table}[h!]
   \caption{\label{table:classify4}Procent klasyfikacji oraz odchylenie dla zbioru treningowego i testowego dla 100 prób nauki}
   \centering
@@ -261,6 +277,11 @@ W Tabeli \ref{table:classify4} $p_a$, $p_b$ oznaczają odpowiednio procent klas
     \hline
   \end{tabular}
 \end{table}
+W Tabeli \ref{table:classify4} $p_a$, $p_b$ oznaczają odpowiednio procent klasyfikacji dla zbioru treningowego i testowego.
+Procent poprawnie sklasyfikowanych obiektów  w zbiorze testowym jest zawsze taki sam, 
+albo bardzo zbliżony do zbioru treningowego. 
+Odchylenie standardowe na poziomie $0.01$ oznacza, że sieć jest bardzo stabilna i dla każdej próby daje takie samą skuteczność.
+Dla $K >= 6$ skuteczność nie zmienia się, tyle neuronów wystarczy aby klasyfikować z dużą dokładnością.
 
 \subsection{Podzadanie 3}
 \begin{figure}[!htb]
