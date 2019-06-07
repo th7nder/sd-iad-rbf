@@ -117,7 +117,7 @@ class DecisionAreas : Classification() {
     }
 
 
-    val numRadialNeurons = 11
+    val numRadialNeurons = 6
     fun generateAllCombinations() {
         val asyncs = selectedCombinations.map { GlobalScope.async { singleChart(numRadialNeurons, it) }}
         runBlocking {
