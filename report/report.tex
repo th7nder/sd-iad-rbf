@@ -319,7 +319,7 @@ Dla $K >= 6$ skuteczność nie zmienia się, tyle neuronów wystarczy aby klasyf
   \end{minipage}\hfill
 \end{figure}
 
-Zaokrąglone obszary wyznaczane na Rysunkach \ref{fig:43_2_1,2} - \ref{fig:43_2_3,4}
+Rysunki zostały wygenerowane dla $K=6$. Zaokrąglone obszary wyznaczane na Rysunkach \ref{fig:43_2_1,2} - \ref{fig:43_2_3,4}
 przypominają kształtem funkcję gaussowską neuronów radialnych.
 Na granicach obszarów decyzyjnych zachodzą niejednoznaczności w klasyfikacji.
 Po redukcji, gdy współrzędne w odpowiednich osiach mają taką samą wartość nie ma sposobu na odróżnienie obiektów.
@@ -376,5 +376,79 @@ Ostateczny wzór:
 \begin{equation}
 \frac{\partial E}{\partial{c_{k,i}}} = \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) w_k z_k(x^j) \frac{1}{\sigma_k^2} (x_i - c_{k,i})
 \end{equation}
+\subsection{Podpunkt 2}
+
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/approximation3/1/derivatives/small.png}
+    \caption{\label{fig:1smallderivative}Za mała sigma}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/approximation3/1/derivatives/optimal.png}
+    \caption{\label{fig:1optimalderivative}Optymalna sigma}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/approximation3/1/derivatives/big.png}
+    \caption{\label{fig:1bigderivative}Za duża sigma}
+  \end{minipage}\hfill
+\end{figure}
+
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/approximation3/2/derivatives/small.png}
+    \caption{\label{fig:2smallderivative}Za mała sigma}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/approximation3/2/derivatives/optimal.png}
+    \caption{\label{fig:2optimalderivative}Optymalna sigma}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/approximation3/2/derivatives/big.png}
+    \caption{\label{fig:2bigderivative}Za duża sigma}
+  \end{minipage}\hfill
+\end{figure}
+
+\subsection{Podpunkt 3}
+Rysunki zostały wygenerowane dla $K=6$.
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/3/derivatives/2_1,2.png}
+    \caption{\label{fig:43_2_1,2derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/3/derivatives/2_1,3.png}
+    \caption{\label{fig:43_2_1,3derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/3/derivatives/2_1,4.png}
+    \caption{\label{fig:43_2_1,4derivative}}
+  \end{minipage}\hfill
+\end{figure}
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/3/derivatives/2_2,3.png}
+    \caption{\label{fig:43_2_2,3derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/3/derivatives/2_2,4.png}
+    \caption{\label{fig:43_2_2,4derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/3/derivatives/2_3,4.png}
+    \caption{\label{fig:43_2_3,4derivative}}
+  \end{minipage}\hfill
+\end{figure}
 
 \end{document}
