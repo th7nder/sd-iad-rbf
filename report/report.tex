@@ -396,6 +396,12 @@ Ostateczny wzór:
   \end{minipage}\hfill
 \end{figure}
 
+Na rysunkach \ref{fig:1smallderivative} - \ref{fig:1bigderivative} zaprezentowano uczenie obu wartsw dla różnej liczby neuronów i różnych sigm.
+Ciekawym przypadkiem jest gdy K=1 dla za małej sigmy, udało się tak ustalić funkcję, że jest bardzo dobrze przybliża dane treningowe i testowe poza prawym końcem wykresu.
+Jest to czysty przypadek, wynikający z rozłożenia danych.
+W odróżnieniu od osobnej nauki warstw tutaj wybór nie ma aż tak dużego wpływu na nauke sieci. Sama się dopasowuje.
+Jednak w przypadku za małej sigmy funkcja przy za dużej liczbie neuronów tworzy niepożądane zniekształcenia.
+W przypadku za dużej sigmy, koniec funkcji jest nie do końca przybliżony. 
 \begin{figure}[!htb]
   \begin{minipage}{0.33\textwidth}
     \centering
@@ -414,8 +420,96 @@ Ostateczny wzór:
   \end{minipage}\hfill
 \end{figure}
 
+Na rysunkach \ref{fig:2smallderivative} - \ref{fig:2bigderivative} czerwonymi liniami zaznaczono funkcje realizowane przez poszczególne neurony.
+W przypadku za małej sigmy można zauważyć, że sieć w celu minimalizacji błędu zmniejszyła maksymalnie współczynnik skalujący z czego wynikają zniekształcenia na wykresie \ref{fig:2smallderivative}.
+Na rysunku \ref{fig:2bigderivative} widać, że tam gdzie funkcja ma prostszy kształt sigmy zostały dobrane tak, aby neurony znajdujące się w tym miejscu redukowały się wzajemnie.
+W przypadku optymalnej sigmy, sieć daje bardzo dobre przybliżenie.
+
 \subsection{Podpunkt 3}
-Rysunki zostały wygenerowane dla $K=6$.
+
+Na rysunkach \ref{fig:41_1_4derivative} - \ref{fig:41_3_1,2,4derivative} widoczna jest zmiana skuteczności klasyfikacji.
+W odróżnieniu od osobnej nauki warstw nauka przebiega znacząco szybciej. Można uznać, że sieć jest już nauczona po 500-100 iteracji.
+Poza tym, sieci są w stanie klasyfikować na poziomie 97\%, a niektóre więcej. Jest to nieznacząca różnica w porównaniu do 95\% osobnej nauki warstw.
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/1_4.png}
+    \caption{\label{fig:41_1_4derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/2_1,2.png}
+    \caption{\label{fig:41_2_1,2derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/2_1,3.png}
+    \caption{\label{fig:41_2_1,3derivative}}
+  \end{minipage}\hfill
+\end{figure}
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/2_1,4.png}
+    \caption{\label{fig:41_2_1,4derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/2_2,3.png}
+    \caption{\label{fig:41_2_2,3derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/2_2,4.png}
+    \caption{\label{fig:41_2_2,4derivative}}
+  \end{minipage}\hfill
+\end{figure}
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/2_3,4.png}
+    \caption{\label{fig:41_2_3,4derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/3_1,2,3.png}
+    \caption{\label{fig:41_3_1,2,3derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/3_1,2,4.png}
+    \caption{\label{fig:41_3_1,2,4derivative}}
+  \end{minipage}\hfill
+\end{figure}
+\begin{figure}[!htb]
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/3_1,3,4.png}
+    \caption{\label{fig:41_3_1,3,4derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/3_2,3,4.png}
+    \caption{\label{fig:41_3_2,3,4derivative}}
+  \end{minipage}
+  \begin{minipage}{0.33\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{../data/classification4/1/derivatives/4_1,2,3,4.png}
+    \caption{\label{fig:41_4_1,2,3,4derivative}}
+  \end{minipage}\hfill
+\end{figure}
+
+
+Rysunki \ref{fig:43_2_1,2derivative} - \ref{fig:43_2_3,4derivative} zostały wygenerowane dla $K=6$.
+Obszary decyzyjne są bardzo zbliżone do osobnej nauki warstw, niektóre granice są bardziej dokładne.
+
+\section{Podsumowanie}
+\begin{itemize}
+  \item Uczenie obydwóch warstw na raz pozwala na większy błąd w przypadku wyznaczania centrów i sigm, jednak nadal trzeba to robić aby uzyskać dobre wyniki
+  \item Umożliwia szybsze nauczenie sieci, kosztem mocy obliczeniowej
+  \item Ostatecznie, daje takie same albo nieznacząco lepsze wyniki niż uczenie dwóch warstw osobno
+\end{itemize}
+
 \begin{figure}[!htb]
   \begin{minipage}{0.33\textwidth}
     \centering
