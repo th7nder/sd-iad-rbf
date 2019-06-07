@@ -10,7 +10,7 @@ import org.knowm.xchart.XYChartBuilder
 import org.knowm.xchart.style.lines.SeriesLines
 import org.knowm.xchart.style.markers.SeriesMarkers
 
-abstract class Approximation3 {
+abstract class Approximation3(var derivatives : Boolean = false) {
     val trainingData = DataLoader.loadFile("approx1", 1, 1)
     val testData = DataLoader.loadFile("approx_test", 1, 1)
     val arguments : List<Double>
@@ -61,7 +61,7 @@ abstract class Approximation3 {
     }
 
 
-    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha)
+    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) = Network(numRadialNeurons, 1, trainingData, FromDataGenerator(), sigmaGenerator, alpha, derivatives)
 
     fun singleNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator) : Network {
         val network = createNetwork(numRadialNeurons, sigmaGenerator)
