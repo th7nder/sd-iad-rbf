@@ -9,7 +9,14 @@ import org.knowm.xchart.style.markers.SeriesMarkers
 import utils.Charts
 
 class BestCombination : Classification() {
-    var folder = "classification4/1"
+    fun getFolder() : String {
+        val folder = "classification4/1"
+        if (derivatives) {
+            return "$folder/derivatives"
+        }
+
+        return folder
+    }
 
     fun singleCombination(combination: Combination) {
         val trainingData = projectData(trainingData, combination)
@@ -38,7 +45,7 @@ class BestCombination : Classification() {
 
         val selectedInputs = combination.second.joinToString(",")
         Charts.saveChart(
-            "$folder/${combination.first}_$selectedInputs",
+            "${getFolder()}/${combination.first}_$selectedInputs",
             plotPercentages("Wejścia $selectedInputs", percentages)
         )
     }
@@ -52,7 +59,7 @@ class BestCombination : Classification() {
                 .xAxisTitle("Liczba iteracji")
                 .title(title).build()
 
-        val skipIters = getTrainingIterations() - 100
+        val skipIters = getTrainingIterations() - 0
 
         for (data in percentages) {
             val seriesName = "K=${data.first}"
@@ -67,12 +74,13 @@ class BestCombination : Classification() {
         return chart
     }
 
-    override fun getTrainingIterations(): Int = 5000
+    override fun getTrainingIterations(): Int = 3000
     override fun getDisplayIterations(): Int = 1000
 }
 
 fun main() {
     val bestCombination = BestCombination()
+    bestCombination.derivatives = true
 
     for (combination in bestCombination.combinations) {
         bestCombination.singleCombination(combination)

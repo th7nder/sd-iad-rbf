@@ -18,6 +18,7 @@ open class Classification {
     val testData = DataLoader.loadFile("classification_test", 4, ::intToPointParser)
     val alpha = 0.05
     val kAverageIterations = 10
+    var derivatives = false
 
     val combinations = arrayListOf(
         Pair(1, listOf(1)),
@@ -81,7 +82,7 @@ open class Classification {
         return classified / data.size.toDouble()
     }
 
-    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator, dataSet: DataSet) = Network(numRadialNeurons, 3, dataSet, centerGenerator, sigmaGenerator, alpha)
+    fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator, dataSet: DataSet) = Network(numRadialNeurons, 3, dataSet, centerGenerator, sigmaGenerator, alpha, derivatives)
     fun createNetwork(numRadialNeurons: Int, trainingDataSet: DataSet) = createNetwork(numRadialNeurons, EqualSigmaGenerator(), KAverageGenerator(kAverageIterations), trainingDataSet)
 
     fun singleNetwork(numRadialNeurons: Int, trainingDataSet: DataSet = trainingData) : Network {

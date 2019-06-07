@@ -12,7 +12,15 @@ import utils.Charts
 import java.awt.Color
 
 class DecisionAreas : Classification() {
-    val folder = "classification4/3"
+    fun getFolder() : String {
+        val folder = "classification4/3"
+        if (derivatives) {
+            return "$folder/derivatives"
+        }
+
+        return folder
+    }
+
     val selectedCombinations = combinations.filter { it.first == 2 }
 
     fun singleChart(numRadialNeurons: Int, combination: Combination) {
@@ -58,7 +66,7 @@ class DecisionAreas : Classification() {
 
         val selectedInputs = combination.second.joinToString(",")
         Charts.saveChart(
-            "$folder/${combination.first}_$selectedInputs",
+            "${getFolder()}/${combination.first}_$selectedInputs",
             createChart("Rozkład punktów z podziałem na klasy", combination, map, assignedPoints)
         )
     }
@@ -118,9 +126,12 @@ class DecisionAreas : Classification() {
 
     }
 
+    override fun getTrainingIterations() = 3000
+
 }
 
 fun main() {
     val decisionAreas = DecisionAreas()
+    decisionAreas.derivatives = true
     decisionAreas.generateAllCombinations()
 }
