@@ -11,6 +11,7 @@ class Network(val numRadialNeurons : Int, var alpha : Double) {
     private val radialLayer = ArrayList<RadialNeuron>()
     val outputLayer = ArrayList<LinearNeuron>()
     lateinit var trainingData : List<Pair<Point, Point>>
+    private var derivatives = false
 
 
     constructor(dimension: Int, sigmas : List<Double>, centers: List<Point>, numLinearNeurons: Int) : this(sigmas.size, 0.0) {
@@ -24,9 +25,11 @@ class Network(val numRadialNeurons : Int, var alpha : Double) {
         trainingData: List<Pair<Point, Point>>,
         centerGenerator: CenterGenerator,
         sigmaGenerator: SigmaGenerator,
-        alpha: Double
+        alpha: Double,
+        derivatives: Boolean = false
     ) : this(numRadialNeurons, alpha) {
         this.trainingData = trainingData
+        this.derivatives = derivatives
         val centers = centerGenerator.generate(numRadialNeurons, trainingData.input())
         val sigmas = sigmaGenerator.generate(centers)
 
@@ -42,7 +45,7 @@ class Network(val numRadialNeurons : Int, var alpha : Double) {
 
     private fun createLinearLayer(dimension: Int, numLinearNeurons: Int) {
         for (i in 1..numLinearNeurons) {
-            val linearNeuron = LinearNeuron(dimension, numRadialNeurons)
+            val linearNeuron = LinearNeuron(dimension, numRadialNeurons, derivatives)
             linearNeuron.connect(radialLayer)
             outputLayer.add(linearNeuron)
         }

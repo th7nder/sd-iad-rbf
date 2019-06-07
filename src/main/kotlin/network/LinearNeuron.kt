@@ -3,7 +3,7 @@ package network
 import math.Point
 import kotlin.random.Random
 
-class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
+class LinearNeuron(dimension: Int, numPreviousNeurons: Int, private val derivatives: Boolean = false) {
     private val weights = DoubleArray(numPreviousNeurons + 1)
     private val neurons = arrayListOf(RadialNeuron(Point(dimension),0.0))
 
@@ -45,14 +45,21 @@ class LinearNeuron(dimension: Int, numPreviousNeurons: Int) {
     fun step(inputs : List<Point>, expected : List<Double>, alpha: Double) {
         val adjustments = DoubleArray(weights.size)
 
-        for ((input, expected) in inputs zip expected) {
-            val difference = output(input) - expected
-            outputNeurons(input).forEachIndexed { index, output -> adjustments[index] += output * difference}
-        }
+        val differences = (inputs zip expected).map {(input, expected) -> Pair(input, output(input) - expected) }
+
+        differences.forEach { (input, difference) ->  outputNeurons(input).forEachIndexed { index, output -> adjustments[index] += output * difference} }
 
         for (index in adjustments.indices) {
             adjustments[index] = adjustments[index] / inputs.size
         }
+
+        if (derivatives) {
+            // skip first neuron which works as bias
+            for (index in 1 until neurons.size) {
+                neurons[index].step(differences, alpha, weights[index])
+            }
+        }
+
 
         for (index in weights.indices) {
             weights[index] = weights[index] - (alpha * adjustments[index])
