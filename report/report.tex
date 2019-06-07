@@ -334,53 +334,44 @@ Po redukcji, gdy współrzędne w odpowiednich osiach mają taką samą wartoś�
 \end{itemize}
 \section{Nauka obu warstw}
 \newcommand{\partialSigma}{\frac{\partial}{\partial{\sigma_{k}}}}
-\begin{equation}
-  \partialSigma = \frac{1}{N} \sum_{j=1}^{N}  (f(x^j) - y^j) z_k(x^j) d^2(x^j, c_k) \frac{1}{\sigma_{k}^3}
-\end{equation}
-\subsection{Pochodna po współczynniku skalującym}
-\begin{align}
+
+\subsection{Wyprowadzenie wzorów}
+\subsubsection{Pochodna po współczynniku skalującym}
+\begin{align*}
   \frac{\partial E}{\partial{\sigma_{k}}}&= \frac{1}{2N} \sum_{j=1}^{N} (f(x^j) - y^j)^2\\
   &= \frac{1}{2N} \sum_{j=1}^{N} 2 (f(x^j) - y^j) f'(x^j)\\
   &= \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) \partialSigma \sum_{k=0}^{K} w_k z_k(x^j)\\
   \partialSigma \sum_{k=0}^{K} w_k z_k(x^j) &= \sum_{k=0}^{K} w_k z_k(x^j) =  w_k \frac{\partial}{\partial{\sigma_{k}}}z_k(x^j)
-\end{align}
+\end{align*}
 Ponieważ tylko $w_k \partialSigma z_k(x^j)$ zależy od $\sigma_k$, dla $k=0, ..., K$
-\begin{align}
+\begin{align*}
   \frac{\partial}{\partial{\sigma_{k}}}z_k(x^j) &= \partialSigma exp(-d^2(x^j, c_k) \frac{1}{2\sigma_k^2})\\
   &= z_k(x^j) \partialSigma ( \frac{1}{2\sigma_k^2}) \\
   &= z_k(x^j) \frac{-1}{2} d^2(x^j, c_k) \partialSigma {\sigma_k^{-2}}\\
   &= z_k(x^j) \frac{-1}{2} d^2(x^j, c_k) -2 \sigma_k^{-3}\\
   &= z_k(x^j) d^2(x^j, c_k) \frac{1}{\sigma_k^3}
-\end{align}
+\end{align*}
 Ostatecznie
 \begin{equation}
   \frac{\partial E}{\partial{\sigma_{k}}} = \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) z_k(x^j) w_k d^2(x^j, c_k) \frac{1}{\sigma_k^3}
 \end{equation}
-\subsection{Pochodna po koordynacie centrum neuronu}
-\begin{align}
-  \frac{\partial E}{\partial{c_{k,i}}} &= \frac{1}{2N} \sum_{j=1}^{N} (f(x^j) - y^j)^2\\
-  &= \frac{1}{2N} \sum_{j=1}^{N} 2 f(x^j - y^j) f'(x^j)\\
-  &= \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) \frac{\partial}{\partial{c_{k,i}}} \sum_{k=0}^{K} w_k z_k(x^j)
-\end{align}
-\begin{equation}
-  \frac{\partial}{\partial{c_{k,i}}} \sum_{k=0}^{K} w_k z_k(x^j) = \sum_{k=0}^{K} w_k z_k(x^j) =  w_k \frac{\partial}{\partial{c_{k,i}}}z_k(x^j)
-\end{equation}
-Ponieważ tylko $w_k \frac{\partial}{\partial{c_{k,i}}}z_k(x^j)$ zależy od $c_{k,i}$, dla $k=1, ..., K$
-\begin{align}
-  w_k \frac{\partial}{\partial{c_{k,i}}}z_k(x^j) &= w_k \frac{\partial}{\partial{c_{k,i}}} exp(-d^2(x^j, c_k) \frac{1}{2\sigma_k^2})\\
-    &= w_k z_k(x^j) \frac{\partial}{\partial{c_{k,i}}} -d^2(x^j, c_k) \frac{1}{2\sigma_k^2}\\
-    &= w_k z_k(x^j) \frac{-1}{2\sigma_k^2} \frac{\partial}{\partial{c_{k,i}}} d^2(x^j, c_k) \\
+\subsubsection{Pochodna po koordynacie centrum neuronu}
+Analogicznie jak w poprzednim wyprowadzeniu.
+\begin{align*}
+  \frac{\partial}{\partial{c_{k,i}}}z_k(x^j) &= \frac{\partial}{\partial{c_{k,i}}} exp(-d^2(x^j, c_k) \frac{1}{2\sigma_k^2})\\
+    &= z_k(x^j) \frac{\partial}{\partial{c_{k,i}}} -d^2(x^j, c_k) \frac{1}{2\sigma_k^2}\\
+    &= z_k(x^j) \frac{-1}{2\sigma_k^2} \frac{\partial}{\partial{c_{k,i}}} d^2(x^j, c_k) \\
   \frac{\partial}{\partial{c_{k,i}}} d^2(x^j, c_k) &= \frac{\partial}{\partial{c_{k,i}}} \sqrt{\sum_{i = 1}^{n} (x_i - c_{k,i})^2}^2\\
   &= \frac{\partial}{\partial{c_{k,i}}} \sum_{i = 1}^{n} (x_i - c_{k,i})^2\\
   &= \sum_{i = 1}^{n} 2 (x_i - c_{k,i}) (-1)\\
   &= -2 \sum_{i = 1}^{n} (x_i - c_{k,i})\\
   &= -2 (x_i - c_{k,i})
-\end{align}
+\end{align*}
 Ponieważ tylko $x_i - c_{k,i}$ zależy od $c_{k,i}$.
-\begin{align}
-  w_k z_k'(x^j) &= w_k z_k(x^j) \frac{-1}{2\sigma_k^2} -2 (x_i - c_{k,i})\\
-  w_k z_k'(x^j) &= w_k z_k(x^j) \frac{1}{\sigma_k^2} (x_i - c_{k,i})\\
-\end{align}
+\begin{align*}
+  \frac{\partial}{\partial{c_{k,i}}} &= z_k(x^j) \frac{-1}{2\sigma_k^2} (-2) (x_i - c_{k,i})\\
+  \frac{\partial}{\partial{c_{k,i}}} &= z_k(x^j) \frac{1}{\sigma_k^2} (x_i - c_{k,i})\\
+\end{align*}
 Ostateczny wzór:
 \begin{equation}
 \frac{\partial E}{\partial{c_{k,i}}} = \frac{1}{N} \sum_{j=1}^{N} f(x^j - y^j) w_k z_k(x^j) \frac{1}{\sigma_k^2} (x_i - c_{k,i})
