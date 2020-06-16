@@ -21,7 +21,11 @@ class DataLoader {
         fun loadCSV(filename: String, numInput: Int, numOutput: Int): ArrayList<Pair<Point, Point>> {
             val data = ArrayList<Pair<Point, Point>>()
             File("data/inputs/$filename").forEachLine {
-                val numbers = it.trim().split(";").map(String::toDouble)
+                val numbers = it.trim().split(";")
+                    .slice(arrayListOf(1, 3, 4, 5, 6))
+                    .map(String::toDouble)
+                    .toMutableList()
+
                 data += Pair(
                     Point(numbers.take(numInput)),
                     Point(numbers.takeLast(numOutput))

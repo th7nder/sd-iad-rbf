@@ -20,7 +20,7 @@ typealias DataSet = ArrayList<Pair<Point, Point>>
 
 open class Track(val trainingData: DataSet, private val trainingIterations : Int, private val displayIterations: Int) {
     val alpha = 0.2
-    val kAverageIterations = 10
+    val kAverageIterations = 50
     var derivatives = true
 
     fun createNetwork(numRadialNeurons: Int, sigmaGenerator: SigmaGenerator, centerGenerator: CenterGenerator, dataSet: DataSet) = Network(numRadialNeurons, 2, dataSet, centerGenerator, sigmaGenerator, alpha, derivatives)
@@ -41,7 +41,7 @@ fun createChart(
     title: String,
     referenceData: List<Point>,
     inputData: List<Point>,
-    outputData: List<Point>
+    outputData: List<Point>?
 ): XYChart {
     val chart =
         XYChartBuilder()
@@ -57,9 +57,11 @@ fun createChart(
     input.lineStyle = SeriesLines.NONE
     input.marker = SeriesMarkers.CIRCLE
 
-    val test = chart.addSeries("Po nauce", outputData.project(0), outputData.project(1))
-    test.lineStyle = SeriesLines.NONE
-    test.marker = SeriesMarkers.CIRCLE
+    if (outputData != null) {
+        val test = chart.addSeries("Po nauce", outputData.project(0), outputData.project(1))
+        test.lineStyle = SeriesLines.NONE
+        test.marker = SeriesMarkers.CIRCLE
+    }
 
     return chart
 }
@@ -67,30 +69,31 @@ fun createChart(
 
 fun main() {
     val datas = arrayListOf(
-        DataLoader.loadCSV("car_1.csv", 2, 2)
-//        DataLoader.loadCSV("car_2.csv", 2, 2),
-//        DataLoader.loadCSV("car_3.csv", 2, 2),
-//        DataLoader.loadCSV("car_5.csv", 2, 2),
-//        DataLoader.loadCSV("car_6.csv", 2, 2),
-//        DataLoader.loadCSV("car_7.csv", 2, 2),
-//        DataLoader.loadCSV("car_8.csv", 2, 2),
-//        DataLoader.loadCSV("car_9.csv", 2, 2),
-//        DataLoader.loadCSV("car_10.csv", 2, 2),
-//        DataLoader.loadCSV("car_11.csv", 2, 2),
-//        DataLoader.loadCSV("car_12.csv", 2, 2)
+        DataLoader.loadCSV("new/1.csv", 3, 2),
+        DataLoader.loadCSV("new/2.csv", 3, 2),
+        DataLoader.loadCSV("new/3.csv", 3, 2),
+        DataLoader.loadCSV("new/4.csv", 3, 2),
+        DataLoader.loadCSV("new/5.csv", 3, 2),
+        DataLoader.loadCSV("new/6.csv", 3, 2),
+        DataLoader.loadCSV("new/7.csv", 3, 2),
+        DataLoader.loadCSV("new/8.csv", 3, 2),
+        DataLoader.loadCSV("new/9.csv", 3, 2),
+        DataLoader.loadCSV("new/10.csv", 3, 2),
+        DataLoader.loadCSV("new/11.csv", 3, 2),
+        DataLoader.loadCSV("new/12.csv", 3, 2)
     )
 
     val filtered = datas.map { data ->
-        println("XDDDDD")
-        val min = data.minBy { it.first.distance(it.second) }
-        println(min!!.first.distance(min.second))
-        val max = data.maxBy { it.first.distance(it.second) }
-        println(max!!.first.distance(max.second))
-        val average = data.sumByDouble { it.first.distance(it.second) } / data.size
+        val average = data.sumByDouble {
+            val first = Point(doubleArrayOf(it.first.coordinates[1], it.first.coordinates[2]))
+           first.distance(it.second)
+            } / data.size
         println(average)
 
         val filtered = data.filter {
-            it.first.distance(it.second) < average / 1.5
+            val first = Point(doubleArrayOf(it.first.coordinates[1], it.first.coordinates[2]))
+            val second = Point(it.second)
+            first.distance(second) < average / 1.5
         }
         filtered
     }
@@ -100,13 +103,20 @@ fun main() {
         trainingData.addAll(data)
     }
 
-    val network = Track(trainingData, 10000, 100).singleNetwork(10)
+    val chartTraining  = createChart("Dane treningowe", trainingData.output(), trainingData.input().map {
+        Point(doubleArrayOf(it.coordinates[1], it.coordinates[2]))
+    }, null)
+    Charts.saveChart("training", chartTraining)
 
-    val testData = DataLoader.loadCSV("test.csv", 2, 2)
+    val network = Track(trainingData, 3000, 100).singleNetwork(10)
+
+    val testData = DataLoader.loadCSV("new/test.csv", 3, 2)
     val outputData = testData.input().map {
         Point(network.output(it))
     }
 
-    val chart = createChart("Korekta toru robota - RBF", testData.output(), testData.input(), outputData)
+    val chart = createChart("Korekta toru robota - RBF", testData.output(), testData.input().map {
+        Point(doubleArrayOf(it.coordinates[1], it.coordinates[2]))
+    }, outputData)
     Charts.saveChart("test", chart)
 }
