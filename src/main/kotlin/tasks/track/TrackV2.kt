@@ -6,6 +6,7 @@ import math.input
 import math.output
 import math.project
 import network.Layer
+import network.LinearNeuron
 import network.Network
 import network.NetworkV2
 import network.centers.CenterGenerator
@@ -27,19 +28,34 @@ fun main() {
 
     val network = NetworkV2()
     val inputLayer = Layer(
-        (1..10).map { SigmoidNeuron(3) }
+        (1..30).map { SigmoidNeuron(3) }
     )
     val outputLayer = Layer(
         listOf(
-            IdentityNeuron(10),
-            IdentityNeuron(10)
+            IdentityNeuron(30),
+            IdentityNeuron(30)
         )
     )
     network.layers.add(inputLayer)
     network.layers.add(outputLayer)
 
-    val test = network.output(
-        Point(doubleArrayOf(1.0, 1.0, 1.0)),
-        Point(doubleArrayOf(1.0, 1.0))
-    )
+
+    for (iteration in 1..10000) {
+        println("$iteration ${network.error(trainingData)}")
+        for (dataPoint in trainingData) {
+            network.output(dataPoint.first, dataPoint.second)
+        }
+        for (neuron in inputLayer.neurons) {
+            for (i in neuron.weights.indices) {
+                neuron.weights[i] += neuron.updates[i] / trainingData.size
+                neuron.updates[i] = 0.0
+            }
+        }
+        for (neuron in outputLayer.neurons) {
+            for (i in neuron.weights.indices) {
+                neuron.weights[i] += neuron.updates[i] / trainingData.size
+                neuron.updates[i] = 0.0
+            }
+        }
+    }
 }

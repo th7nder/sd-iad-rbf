@@ -9,6 +9,6 @@ class IdentityNeuron(
     }
 
     override fun derivative(x: Double) : Double {
-        return 0.0
+        return 1.0
     }
 }
