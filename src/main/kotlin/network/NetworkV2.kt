@@ -3,10 +3,12 @@ package network
 import math.Point
 
 class NetworkV2 {
-    // TODO: momentum
     // TODO: online/offline
     private val alpha = 0.2
+    private val momentum = 0.1
     val layers = ArrayList<Layer>()
+    private var previousDeltas : List<ArrayList<DoubleArray>>? = null
+    private var previousBiases : List<DoubleArray>? = null
 
     fun output(x : Point) : Point {
         return output(layers.size - 1, x)
@@ -64,13 +66,25 @@ class NetworkV2 {
         for ((l, layer) in layers.withIndex()) {
             for ((m, neuron) in layer.neurons.withIndex()) {
                 biases[l][m] = biases[l][m] / trainingData.size
-                neuron.bias = neuron.bias - alpha * biases[l][m]
+                if (previousBiases != null) {
+                    neuron.bias = neuron.bias - alpha * biases[l][m] + momentum * previousBiases!![l][m]
+                } else {
+                    neuron.bias = neuron.bias - alpha * biases[l][m]
+
+                }
                 for ((n, weight) in neuron.weights.withIndex()) {
                     deltas[l][m][n] = deltas[l][m][n] / trainingData.size
-                    neuron.weights[n] = weight - alpha * deltas[l][m][n]
+                    if (previousDeltas != null) {
+                        neuron.weights[n] = weight - alpha * deltas[l][m][n] + momentum * previousDeltas!![l][m][n]
+                    } else {
+                        neuron.weights[n] = weight - alpha * deltas[l][m][n]
+                    }
                 }
             }
         }
+
+        previousBiases = biases
+        previousDeltas = deltas
     }
 
     fun delta(b: List<Double>, m: Int, input: Point, weights: DoubleArray) {
