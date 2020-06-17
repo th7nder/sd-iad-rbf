@@ -4,8 +4,8 @@ import math.Point
 
 class NetworkV2 {
     // TODO: online/offline
-    private val alpha = 0.3
-    private val momentum = 0.02
+    private val alpha = 0.1
+    private val momentum = 0.05
     val layers = ArrayList<Layer>()
     private var previousDeltas : List<ArrayList<DoubleArray>>? = null
     private var previousBiases : List<DoubleArray>? = null
