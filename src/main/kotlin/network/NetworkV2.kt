@@ -15,7 +15,7 @@ class NetworkV2 {
 
     fun output(layer: Int, x: Point) : Point {
         var input = x
-        var output : Point = Point(x.dimension())
+        var output = Point(x.dimension())
         for (i in 0..layer) {
             input = layers[i].output(input)
             output = input
@@ -36,6 +36,7 @@ class NetworkV2 {
             firstLayerNeuronsWeightDelta.add(DoubleArray(layers[0].neurons[0].weights.size))
         }
 
+        // TODO: optimize outputs
         for (data in trainingData) {
             val (input, expected) = data
             val b = layers[1].backPropagate(output(input), expected, output(0, input))

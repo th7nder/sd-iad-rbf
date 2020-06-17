@@ -39,7 +39,7 @@ fun main() {
     network.layers.add(outputLayer)
 
 
-    for (iteration in 1..10000) {
+    for (iteration in 1..30000) {
         println("$iteration ${network.error(trainingData)}")
         network.train(trainingData)
     }
