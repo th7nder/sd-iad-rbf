@@ -2,49 +2,53 @@ package tasks.track
 
 import files.DataLoader
 import math.Point
-import math.input
-import math.output
-import math.project
-import network.Layer
-import network.LinearNeuron
-import network.Network
-import network.NetworkV2
-import network.centers.CenterGenerator
-import network.centers.KAverageGenerator
+import network.neurons.Layer
+import network.neurons.NetworkV2
 import network.neurons.IdentityNeuron
 import network.neurons.SigmoidNeuron
-import network.sigmas.EqualSigmaGenerator
-import network.sigmas.SigmaGenerator
-import org.knowm.xchart.XYChart
-import org.knowm.xchart.XYChartBuilder
-import org.knowm.xchart.style.lines.SeriesLines
-import org.knowm.xchart.style.markers.SeriesMarkers
-import utils.Charts
-
-
+import java.util.*
 
 fun main() {
-    val trainingData = DataLoader.loadFile("approx1", 1, 1)
+    val datas = listOf(
+        DataLoader.loadCSV("new/1.csv", 3, 2),
+        DataLoader.loadCSV("new/2.csv", 3, 2)
+    )
+
+    val filtered = datas.map { data ->
+        val average = data.sumByDouble {
+            val first = Point(doubleArrayOf(it.first.coordinates[1], it.first.coordinates[2]))
+            first.distance(it.second)
+        } / data.size
+
+        val filtered = data.filter {
+            val first = Point(doubleArrayOf(it.first.coordinates[1], it.first.coordinates[2]))
+            val second = Point(it.second)
+            first.distance(second) < average
+        }
+        filtered
+    }
+    val trainingData = ArrayList<Pair<Point, Point>>()
+    for (data in filtered) {
+        trainingData.addAll(data)
+    }
 
     val network = NetworkV2()
     val inputLayer = Layer(
-        (1..10).map { SigmoidNeuron(1) }
-    )
-    val middleLayer = Layer(
-        (1..3).map { SigmoidNeuron(10) }
+        (1..20).map { SigmoidNeuron(3) }
     )
     val outputLayer = Layer(
         listOf(
-            IdentityNeuron(3)
+            IdentityNeuron(20),
+            IdentityNeuron(20)
         )
     )
     network.layers.add(inputLayer)
-    network.layers.add(middleLayer)
     network.layers.add(outputLayer)
-
-
+    
     for (iteration in 1..30000) {
-        println("$iteration ${network.error(trainingData)}")
+        if (iteration % 100 == 0) {
+            println("$iteration ${network.error(trainingData)}")
+        }
         network.train(trainingData)
     }
 }

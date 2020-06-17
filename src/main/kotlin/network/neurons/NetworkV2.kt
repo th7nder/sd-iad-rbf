@@ -1,11 +1,11 @@
-package network
+package network.neurons
 
 import math.Point
 
 class NetworkV2 {
     // TODO: online/offline
-    private val alpha = 0.2
-    private val momentum = 0.1
+    private val alpha = 0.3
+    private val momentum = 0.02
     val layers = ArrayList<Layer>()
     private var previousDeltas : List<ArrayList<DoubleArray>>? = null
     private var previousBiases : List<DoubleArray>? = null
@@ -38,14 +38,20 @@ class NetworkV2 {
         }
 
         // TODO: optimize outputs
-        for (data in trainingData) {
+        for (data in trainingData.shuffled()) {
             val (input, expected) = data
+
+            val outputs = ArrayList<Point>()
+            for ((index) in layers.withIndex()) {
+                outputs.add(output(index, input))
+            }
 
             var previousB : List<Double> = ArrayList()
             for ((l, layer) in layers.withIndex().reversed()) {
                 var b: List<Double>
                 val previousOutput = if (l != 0) {
-                    output(l - 1, input)
+                    outputs[l - 1]
+//                    output(l - 1, input)
                 } else {
                     input
                 }

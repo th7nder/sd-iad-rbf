@@ -4,12 +4,12 @@ import math.Point
 import kotlin.random.Random
 
 abstract class Neuron(numInputs: Int) {
-    var bias = Random.nextDouble(-4.0, 4.0)
+    var bias = Random.nextDouble(-1.0, 1.0)
     val weights = DoubleArray(numInputs)
 
     init {
         for (i in weights.indices) {
-            weights[i] = Random.nextDouble(-1.0, 1.0)
+            weights[i] = Random.nextDouble(-0.99, 1.0)
         }
     }
 

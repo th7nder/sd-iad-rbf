@@ -1,7 +1,6 @@
-package network
+package network.neurons
 
 import math.Point
-import network.neurons.Neuron
 
 open class Layer(val neurons: List<Neuron>) {
 
