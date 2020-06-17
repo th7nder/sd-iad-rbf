@@ -25,53 +25,70 @@ class NetworkV2 {
     }
 
     fun train(trainingData: List<Pair<Point, Point>>) {
-        val lastLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
-        val lastLayerBiases = DoubleArray(layers[1].getNumberNeurons())
-        for (i in 0 until layers[1].getNumberNeurons()) {
-            lastLayerNeuronsWeightDelta.add(DoubleArray(layers[1].neurons[0].weights.size))
+        val deltas = ArrayList<ArrayList<DoubleArray>>()
+        for (layer in layers) {
+            val neuronsWeights = ArrayList<DoubleArray>()
+            for (i in 0 until layer.getNumberNeurons()) {
+                neuronsWeights.add(DoubleArray(layer.neurons[0].weights.size))
+            }
+            deltas.add(neuronsWeights)
         }
-        val firstLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
-        val firstLayerBiases = DoubleArray(layers[0].getNumberNeurons())
-        for (i in 0 until layers[0].getNumberNeurons()) {
-            firstLayerNeuronsWeightDelta.add(DoubleArray(layers[0].neurons[0].weights.size))
-        }
+
+//        val lastLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
+//        val lastLayerBiases = DoubleArray(layers[1].getNumberNeurons())
+//        for (i in 0 until layers[1].getNumberNeurons()) {
+//            lastLayerNeuronsWeightDelta.add(DoubleArray(layers[1].neurons[0].weights.size))
+//        }
+//        val firstLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
+//        val firstLayerBiases = DoubleArray(layers[0].getNumberNeurons())
+//        for (i in 0 until layers[0].getNumberNeurons()) {
+//            firstLayerNeuronsWeightDelta.add(DoubleArray(layers[0].neurons[0].weights.size))
+//        }
 
         // TODO: optimize outputs
         for (data in trainingData) {
             val (input, expected) = data
-            val b = layers[1].backPropagate(output(input), expected, output(0, input))
-            for (m in lastLayerNeuronsWeightDelta.indices) {
-                lastLayerBiases[m] = lastLayerBiases[m] + b[m]
-                delta(b, m, output(0, input), lastLayerNeuronsWeightDelta[m])
-            }
 
-            val bFirst = layers[0].backPropagate(b, layers[1], input)
-            for (m in firstLayerNeuronsWeightDelta.indices) {
-                firstLayerBiases[m] = firstLayerBiases[m] + bFirst[m]
-                delta(bFirst, m, input, firstLayerNeuronsWeightDelta[m])
+            var previousB : List<Double> = ArrayList()
+            for ((l, layer) in layers.withIndex().reversed()) {
+                var b: List<Double>
+                val previousOutput = if (l != 0) {
+                    output(l - 1, input)
+                } else {
+                    input
+                }
+
+                if (l == layers.size - 1) {
+                    b = layer.backPropagate(output(input), expected, previousOutput)
+                } else {
+                    b = layer.backPropagate(previousB, layers[l + 1], previousOutput)
+                }
+                for (m in layer.neurons.indices) {
+                    // TODO: bias
+                    delta(b, m, previousOutput, deltas[l][m])
+                }
+                previousB = b
             }
+//            val b = layers[1].backPropagate(output(input), expected, output(0, input))
+//            for (m in lastLayerNeuronsWeightDelta.indices) {
+//                lastLayerBiases[m] = lastLayerBiases[m] + b[m]
+//                delta(b, m, output(0, input), lastLayerNeuronsWeightDelta[m])
+//            }
+//
+//            val bFirst = layers[0].backPropagate(b, layers[1], input)
+//            for (m in firstLayerNeuronsWeightDelta.indices) {
+//                firstLayerBiases[m] = firstLayerBiases[m] + bFirst[m]
+//                delta(bFirst, m, input, firstLayerNeuronsWeightDelta[m])
+//            }
         }
 
-        for (m in lastLayerNeuronsWeightDelta.indices) {
-            val changes = lastLayerNeuronsWeightDelta[m]
-            lastLayerBiases[m] = lastLayerBiases[m] / trainingData.size
-            layers[1].neurons[m].bias -= alpha * lastLayerBiases[m]
-            for (i in changes.indices) {
-                changes[i] = changes[i] / trainingData.size
-                val weights = layers[1].neurons[m].weights
-                weights[i] = weights[i] - alpha * changes[i]
-            }
-        }
-
-        for (m in firstLayerNeuronsWeightDelta.indices) {
-            val changes = firstLayerNeuronsWeightDelta[m]
-            firstLayerBiases[m] = firstLayerBiases[m] / trainingData.size
-            layers[0].neurons[m].bias -= alpha * firstLayerBiases[m]
-
-            for (i in changes.indices) {
-                changes[i] = changes[i] / trainingData.size
-                val weights = layers[0].neurons[m].weights
-                weights[i] = weights[i] - alpha * changes[i]
+        for ((l, layer) in layers.withIndex()) {
+            for ((m, neuron) in layer.neurons.withIndex()) {
+                // TODO: bias
+                for ((n, weight) in neuron.weights.withIndex()) {
+                    deltas[l][m][n] = deltas[l][m][n] / trainingData.size
+                    neuron.weights[n] = weight - alpha * deltas[l][m][n]
+                }
             }
         }
     }
