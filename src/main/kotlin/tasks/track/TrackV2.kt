@@ -28,14 +28,18 @@ fun main() {
 
     val network = NetworkV2()
     val inputLayer = Layer(
-        (1..5).map { SigmoidNeuron(1) }
+        (1..10).map { SigmoidNeuron(1) }
+    )
+    val middleLayer = Layer(
+        (1..3).map { SigmoidNeuron(10) }
     )
     val outputLayer = Layer(
         listOf(
-            IdentityNeuron(5)
+            IdentityNeuron(3)
         )
     )
     network.layers.add(inputLayer)
+    network.layers.add(middleLayer)
     network.layers.add(outputLayer)
 
 
