@@ -5,7 +5,7 @@ import math.Point
 class NetworkV2 {
     // TODO: online/offline
     private val alpha = 0.1
-    private val momentum = 0.05
+    private val momentum = 0.0
     val layers = ArrayList<Layer>()
     private var previousDeltas : List<ArrayList<DoubleArray>>? = null
     private var previousBiases : List<DoubleArray>? = null
@@ -51,7 +51,6 @@ class NetworkV2 {
                 var b: List<Double>
                 val previousOutput = if (l != 0) {
                     outputs[l - 1]
-//                    output(l - 1, input)
                 } else {
                     input
                 }

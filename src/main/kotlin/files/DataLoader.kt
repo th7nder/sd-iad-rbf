@@ -22,7 +22,7 @@ class DataLoader {
             val data = ArrayList<Pair<Point, Point>>()
             File("data/inputs/$filename").forEachLine {
                 val numbers = it.trim().split(";")
-                    .slice(arrayListOf(1, 3, 4, 5, 6))
+                    .slice(arrayListOf(3, 4, 5, 6))
                     .map(String::toDouble)
                     .toMutableList()
 
