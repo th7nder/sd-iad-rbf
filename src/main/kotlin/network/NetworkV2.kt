@@ -1,7 +1,6 @@
 package network
 
 import math.Point
-import kotlin.math.exp
 
 class NetworkV2 {
     // TODO: momentum
@@ -27,10 +26,12 @@ class NetworkV2 {
 
     fun train(trainingData: List<Pair<Point, Point>>) {
         val lastLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
+        val lastLayerBiases = DoubleArray(layers[1].getNumberNeurons())
         for (i in 0 until layers[1].getNumberNeurons()) {
             lastLayerNeuronsWeightDelta.add(DoubleArray(layers[1].neurons[0].weights.size))
         }
         val firstLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
+        val firstLayerBiases = DoubleArray(layers[0].getNumberNeurons())
         for (i in 0 until layers[0].getNumberNeurons()) {
             firstLayerNeuronsWeightDelta.add(DoubleArray(layers[0].neurons[0].weights.size))
         }
@@ -39,17 +40,21 @@ class NetworkV2 {
             val (input, expected) = data
             val b = layers[1].backPropagate(output(input), expected, output(0, input))
             for (m in lastLayerNeuronsWeightDelta.indices) {
+                lastLayerBiases[m] = lastLayerBiases[m] + b[m]
                 delta(b, m, output(0, input), lastLayerNeuronsWeightDelta[m])
             }
 
             val bFirst = layers[0].backPropagate(b, layers[1], input)
             for (m in firstLayerNeuronsWeightDelta.indices) {
+                firstLayerBiases[m] = firstLayerBiases[m] + bFirst[m]
                 delta(bFirst, m, input, firstLayerNeuronsWeightDelta[m])
             }
         }
 
         for (m in lastLayerNeuronsWeightDelta.indices) {
             val changes = lastLayerNeuronsWeightDelta[m]
+            lastLayerBiases[m] = lastLayerBiases[m] / trainingData.size
+            layers[1].neurons[m].bias -= alpha * lastLayerBiases[m]
             for (i in changes.indices) {
                 changes[i] = changes[i] / trainingData.size
                 val weights = layers[1].neurons[m].weights
@@ -59,6 +64,9 @@ class NetworkV2 {
 
         for (m in firstLayerNeuronsWeightDelta.indices) {
             val changes = firstLayerNeuronsWeightDelta[m]
+            firstLayerBiases[m] = firstLayerBiases[m] / trainingData.size
+            layers[0].neurons[m].bias -= alpha * firstLayerBiases[m]
+
             for (i in changes.indices) {
                 changes[i] = changes[i] / trainingData.size
                 val weights = layers[0].neurons[m].weights
