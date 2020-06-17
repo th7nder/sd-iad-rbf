@@ -45,9 +45,15 @@ class LinearNeuron(dimension: Int, numPreviousNeurons: Int, private val derivati
     fun step(inputs : List<Point>, expected : List<Double>, alpha: Double) {
         val adjustments = DoubleArray(weights.size)
 
-        val differences = (inputs zip expected).map {(input, expected) -> Pair(input, output(input) - expected) }
+        val differences = (inputs zip expected).map { (input, expected) ->
+            Pair(input, output(input) - expected)
+        }
 
-        differences.forEach { (input, difference) ->  outputNeurons(input).forEachIndexed { index, output -> adjustments[index] += output * difference} }
+        differences.forEach { (input, difference) ->
+            outputNeurons(input).forEachIndexed { index, output ->
+                adjustments[index] += output * difference
+            }
+        }
 
         for (index in adjustments.indices) {
             adjustments[index] = adjustments[index] / inputs.size
@@ -59,7 +65,6 @@ class LinearNeuron(dimension: Int, numPreviousNeurons: Int, private val derivati
                 neurons[index].step(differences, alpha, weights[index])
             }
         }
-
 
         for (index in weights.indices) {
             weights[index] = weights[index] - (alpha * adjustments[index])
