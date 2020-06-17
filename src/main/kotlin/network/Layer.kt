@@ -17,17 +17,17 @@ open class Layer(val neurons: List<Neuron>) {
         return Point(neurons.map { it.output(x) })
     }
 
-    fun backPropagate(output: Point, input: Point, expected: Point) : List<Double> {
+    fun backPropagate(output: Point, expected: Point, previousOutput: Point) : List<Double> {
         val b = (output.coordinates zip expected.coordinates)
             .withIndex()
             .map {(index, pair) ->
                 val neuron = neurons[index]
-                (pair.first - pair.second) * neuron.derivative(neuron.a(input))
+                (pair.first - pair.second) * neuron.derivative(neuron.a(previousOutput))
             }
         return b
     }
 
-    fun backPropagate(previousOutput: Point, upperB : List<Double>, layer: Layer) : List<Double> {
+    fun backPropagate(upperB : List<Double>, layer: Layer, previousOutput: Point) : List<Double> {
         val b = ArrayList<Double>()
         for (m in neurons.indices) {
             var sum = 0.0

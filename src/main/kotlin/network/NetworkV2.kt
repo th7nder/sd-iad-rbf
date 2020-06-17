@@ -1,53 +1,79 @@
 package network
 
 import math.Point
-import network.neurons.Neuron
+import kotlin.math.exp
 
 class NetworkV2 {
     // TODO: momentum
     // TODO: online/offline
-    private val alpha = 0.01
+    // TODO: bias
+    private val alpha = 0.2
     val layers = ArrayList<Layer>()
 
-    fun output(x : Point, expected: Point? = null) : Point {
-        var input = x
-        val outputs = ArrayList<Point>()
-        for (layer in layers) {
-            input = layer.output(input)
-            outputs.add(input)
-        }
-        if (expected == null) {
-            return outputs.last()
-        }
-
-
-        var bs : ArrayList<List<Double>> = ArrayList()
-        for ((index, layer) in layers.withIndex().reversed()) {
-            bs.add(if (index == layers.size - 1) {
-                layer.backPropagate(outputs[index], outputs[index - 1], expected)
-            } else {
-                if (index == 0) {
-                    layer.backPropagate(x, bs.last(), layers[index + 1])
-                } else {
-                    layer.backPropagate(outputs[index - 1], bs.last(), layers[index + 1])
-                }
-            })
-        }
-
-        applyChanges(bs[0], outputs[0], layers[1].neurons)
-        applyChanges(bs[1], x, layers[0].neurons)
-
-        return outputs.last()
+    fun output(x : Point) : Point {
+        return output(layers.size - 1, x)
     }
 
-    fun applyChanges(b: List<Double>, input: Point, neurons: List<Neuron>) {
-        for (m in neurons.indices) {
-            val neuron = neurons[m]
-            for (n in neuron.updates.indices) {
-                neuron.updates[n] -= alpha * (b[m] * input.coordinates[n])
+    fun output(layer: Int, x: Point) : Point {
+        var input = x
+        var output : Point = Point(x.dimension())
+        for (i in 0..layer) {
+            input = layers[i].output(input)
+            output = input
+        }
+
+        return output
+    }
+
+    fun train(trainingData: List<Pair<Point, Point>>) {
+        val lastLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
+        for (i in 0 until layers[1].getNumberNeurons()) {
+            lastLayerNeuronsWeightDelta.add(DoubleArray(layers[1].neurons[0].weights.size))
+        }
+        val firstLayerNeuronsWeightDelta = ArrayList<DoubleArray>()
+        for (i in 0 until layers[0].getNumberNeurons()) {
+            firstLayerNeuronsWeightDelta.add(DoubleArray(layers[0].neurons[0].weights.size))
+        }
+
+        for (data in trainingData) {
+            val (input, expected) = data
+            val b = layers[1].backPropagate(output(input), expected, output(0, input))
+            for (m in lastLayerNeuronsWeightDelta.indices) {
+                delta(b, m, output(0, input), lastLayerNeuronsWeightDelta[m])
+            }
+
+            val bFirst = layers[0].backPropagate(b, layers[1], input)
+            for (m in firstLayerNeuronsWeightDelta.indices) {
+                delta(bFirst, m, input, firstLayerNeuronsWeightDelta[m])
+            }
+        }
+
+        for (m in lastLayerNeuronsWeightDelta.indices) {
+            val changes = lastLayerNeuronsWeightDelta[m]
+            for (i in changes.indices) {
+                changes[i] = changes[i] / trainingData.size
+                val weights = layers[1].neurons[m].weights
+                weights[i] = weights[i] - alpha * changes[i]
+            }
+        }
+
+        for (m in firstLayerNeuronsWeightDelta.indices) {
+            val changes = firstLayerNeuronsWeightDelta[m]
+            for (i in changes.indices) {
+                changes[i] = changes[i] / trainingData.size
+                val weights = layers[0].neurons[m].weights
+                weights[i] = weights[i] - alpha * changes[i]
             }
         }
     }
 
-    fun error(data: List<Pair<Point, Point>>) = data.sumByDouble { (input, expected) -> (output(input) - expected).pow(2.0).sum() } / (2.0 * data.size)
+    fun delta(b: List<Double>, m: Int, input: Point, weights: DoubleArray) {
+        for (n in weights.indices) {
+            weights[n] += (b[m] * input.coordinates[n])
+        }
+    }
+
+    fun error(data: List<Pair<Point, Point>>) = data.sumByDouble { (input, expected) ->
+        (output(input) - expected).pow(2.0).sum()
+    } / (2.0 * data.size)
 }

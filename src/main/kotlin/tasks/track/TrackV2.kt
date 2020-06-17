@@ -24,16 +24,15 @@ import utils.Charts
 
 
 fun main() {
-    val trainingData = DataLoader.loadCSV("new/1.csv", 3, 2)
+    val trainingData = DataLoader.loadFile("approx1", 1, 1)
 
     val network = NetworkV2()
     val inputLayer = Layer(
-        (1..30).map { SigmoidNeuron(3) }
+        (1..2).map { SigmoidNeuron(1) }
     )
     val outputLayer = Layer(
         listOf(
-            IdentityNeuron(30),
-            IdentityNeuron(30)
+            IdentityNeuron(2)
         )
     )
     network.layers.add(inputLayer)
@@ -42,20 +41,6 @@ fun main() {
 
     for (iteration in 1..10000) {
         println("$iteration ${network.error(trainingData)}")
-        for (dataPoint in trainingData) {
-            network.output(dataPoint.first, dataPoint.second)
-        }
-        for (neuron in inputLayer.neurons) {
-            for (i in neuron.weights.indices) {
-                neuron.weights[i] += neuron.updates[i] / trainingData.size
-                neuron.updates[i] = 0.0
-            }
-        }
-        for (neuron in outputLayer.neurons) {
-            for (i in neuron.weights.indices) {
-                neuron.weights[i] += neuron.updates[i] / trainingData.size
-                neuron.updates[i] = 0.0
-            }
-        }
+        network.train(trainingData)
     }
 }

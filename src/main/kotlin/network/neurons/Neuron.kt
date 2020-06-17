@@ -6,7 +6,6 @@ import kotlin.random.Random
 abstract class Neuron(numInputs: Int) {
     var bias = Random.nextDouble(-4.0, 4.0)
     val weights = DoubleArray(numInputs)
-    val updates = DoubleArray(numInputs)
 
     init {
         for (i in weights.indices) {
@@ -22,6 +21,6 @@ abstract class Neuron(numInputs: Int) {
     }
 
     fun a(x: Point): Double {
-        return (x.coordinates zip weights).map { it.first * it.second }.sum()
+        return (x.coordinates zip weights).map { it.first * it.second }.sum() + bias
     }
 }
