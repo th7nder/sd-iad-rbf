@@ -11,6 +11,8 @@ open class Point(n: Int) : Cloneable {
 
     fun x() = coordinates[0]
 
+    fun y() = coordinates[1]
+
     public override fun clone(): Point {
         val point = Point(coordinates.size)
         point.update(this)

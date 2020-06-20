@@ -15,11 +15,14 @@ import org.knowm.xchart.XYChartBuilder
 import org.knowm.xchart.style.lines.SeriesLines
 import org.knowm.xchart.style.markers.SeriesMarkers
 import utils.Charts
+import java.io.FileWriter
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 typealias DataSet = ArrayList<Pair<Point, Point>>
 
 open class Track(val trainingData: DataSet, private val trainingIterations : Int, private val displayIterations: Int) {
-    val alpha = 0.2
+    val alpha = 0.5
     val kAverageIterations = 50
     var derivatives = true
 
@@ -69,54 +72,54 @@ fun createChart(
 
 fun main() {
     val datas = arrayListOf(
-        DataLoader.loadCSV("new/1.csv", 3, 2),
-        DataLoader.loadCSV("new/2.csv", 3, 2),
-        DataLoader.loadCSV("new/3.csv", 3, 2),
-        DataLoader.loadCSV("new/4.csv", 3, 2),
-        DataLoader.loadCSV("new/5.csv", 3, 2),
-        DataLoader.loadCSV("new/6.csv", 3, 2),
-        DataLoader.loadCSV("new/7.csv", 3, 2),
-        DataLoader.loadCSV("new/8.csv", 3, 2),
-        DataLoader.loadCSV("new/9.csv", 3, 2),
-        DataLoader.loadCSV("new/10.csv", 3, 2),
-        DataLoader.loadCSV("new/11.csv", 3, 2),
-        DataLoader.loadCSV("new/12.csv", 3, 2)
+        DataLoader.loadCSV("new/1.csv", 2, 2),
+        DataLoader.loadCSV("new/2.csv", 2, 2),
+        DataLoader.loadCSV("new/3.csv", 2, 2),
+        DataLoader.loadCSV("new/4.csv", 2, 2),
+        DataLoader.loadCSV("new/5.csv", 2, 2),
+        DataLoader.loadCSV("new/6.csv", 2, 2),
+        DataLoader.loadCSV("new/7.csv", 2, 2),
+        DataLoader.loadCSV("new/8.csv", 2, 2),
+        DataLoader.loadCSV("new/9.csv", 2, 2),
+        DataLoader.loadCSV("new/10.csv", 2, 2),
+        DataLoader.loadCSV("new/11.csv", 2, 2),
+        DataLoader.loadCSV("new/12.csv", 2, 2)
     )
 
-    val filtered = datas.map { data ->
-        val average = data.sumByDouble {
-            val first = Point(doubleArrayOf(it.first.coordinates[1], it.first.coordinates[2]))
-           first.distance(it.second)
-            } / data.size
-        println(average)
+    val sum = datas.sumByDouble { data -> data.sumByDouble { it.first.distance(it.second) }}
+    val count = datas.sumBy { it.size }
+    val average = sum / count
 
-        val filtered = data.filter {
-            val first = Point(doubleArrayOf(it.first.coordinates[1], it.first.coordinates[2]))
-            val second = Point(it.second)
-            first.distance(second) < average / 1.5
-        }
-        filtered
-    }
+
+//    val filtered = datas.map { data ->
+//        val filtered = data.filter {
+//            val second = Point(it.second)
+//            it.first.distance(second) < average
+//        }
+//        filtered
+//    }
 
     val trainingData = ArrayList<Pair<Point, Point>>()
-    for (data in filtered) {
+    for (data in datas) {
         trainingData.addAll(data)
     }
 
-    val chartTraining  = createChart("Dane treningowe", trainingData.output(), trainingData.input().map {
-        Point(doubleArrayOf(it.coordinates[1], it.coordinates[2]))
-    }, null)
+    val chartTraining  = createChart("Dane treningowe", trainingData.output(), trainingData.input(), null)
     Charts.saveChart("training", chartTraining)
 
-    val network = Track(trainingData, 3000, 100).singleNetwork(10)
+    val network = Track(trainingData, 5000, 100).singleNetwork(15)
 
-    val testData = DataLoader.loadCSV("new/test.csv", 3, 2)
+    val testData = DataLoader.loadCSV("new/test.csv", 2, 2)
     val outputData = testData.input().map {
         Point(network.output(it))
     }
 
-    val chart = createChart("Korekta toru robota - RBF", testData.output(), testData.input().map {
-        Point(doubleArrayOf(it.coordinates[1], it.coordinates[2]))
-    }, outputData)
+    val chart = createChart("Korekta toru robota - RBF", testData.output(), testData.input(), outputData)
     Charts.saveChart("test", chart)
+
+    val fw = FileWriter("data/results.csv")
+    (outputData zip testData.output()).forEach {
+        fw.append("${it.first.x()};${it.first.y()};${it.second.x()};${it.second.y()}\n")
+    }
+    fw.close()
 }

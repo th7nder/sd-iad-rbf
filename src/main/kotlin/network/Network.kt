@@ -74,6 +74,12 @@ class Network(val numRadialNeurons : Int, var alpha : Double) {
 
     fun train(iters: Int,  onIteration : ((i : Int, error: Double) -> Unit)? = null) {
         for (i in 1..iters) {
+            if (i > 2000) {
+                alpha = 0.2
+            }
+            if (i > 3000) {
+                alpha = 0.1
+            }
             step()
 
             onIteration?.invoke(i, error())
