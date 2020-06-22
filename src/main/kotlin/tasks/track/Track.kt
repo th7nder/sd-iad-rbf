@@ -90,26 +90,31 @@ fun main() {
     val count = datas.sumBy { it.size }
     val average = sum / count
 
+    val stdSum = datas.sumByDouble { data -> data.sumByDouble {
+        (it.first.distance(it.second) - average).pow(2)
+    } }
+    val stdev = sqrt(stdSum / count)
 
-//    val filtered = datas.map { data ->
-//        val filtered = data.filter {
-//            val second = Point(it.second)
-//            it.first.distance(second) < average
-//        }
-//        filtered
-//    }
+    val filtered = datas.map { data ->
+        val filtered = data.filter {
+            val second = Point(it.second)
+            it.first.distance(second) > 0
+        }
+        filtered
+    }
 
     val trainingData = ArrayList<Pair<Point, Point>>()
-    for (data in datas) {
+    for (data in filtered) {
         trainingData.addAll(data)
     }
 
     val chartTraining  = createChart("Dane treningowe", trainingData.output(), trainingData.input(), null)
     Charts.saveChart("training", chartTraining)
 
-    val network = Track(trainingData, 5000, 100).singleNetwork(15)
+    val network = Track(trainingData, 1000, 100).singleNetwork(15)
 
     val testData = DataLoader.loadCSV("new/test.csv", 2, 2)
+        .filter { it.first.distance(it.second) > 0 }
     val outputData = testData.input().map {
         Point(network.output(it))
     }
